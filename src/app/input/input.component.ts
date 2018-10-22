@@ -1,19 +1,21 @@
-import { Component, EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-input',
   templateUrl: './input.component.html',
-  styleUrls: ['./input.component.css'],
-  inputs:['comments'],
-  outputs:['newcomments'],
+  styleUrls: ['./input.component.css']
 })
 export class InputComponent {
 
-  public comments = ['test'];
-  public newcomments:EventEmitter = new EventEmitter();
+  comments = [
+    {
+      sendDate: new Date(),
+      message: 'test'
+    }];
   addComment(newComment: string) {
     if (newComment) {
-      this.newcomments.next(this.comments.push(newComment));
+      this.comments.push({message: newComment,
+                          sendDate: new Date()});
     }
   }
 

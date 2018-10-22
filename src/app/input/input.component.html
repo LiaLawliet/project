@@ -1,11 +1,16 @@
-<app-com-area [comments]="test" (newcomments)=""></app-com-area>
 <div class="input-group fixed-bottom">
-    <input  #newComment
-            (keyup.enter)="addComment(newComment.value); newComment.value=''"
-            type="text" class="form-control" 
-            placeholder="Your comment" 
-            aria-describedby="button-addon2">
-    <div class="input-group-append">
-      <button class="btn btn-success" type="button" id="button-addon2" (click)="addComment(newComment.value); newComment.value=''">Ajouter</button>
-    </div>
+  <input  #newComment
+          (keyup.enter)="addComment(newComment.value); newComment.value=''"
+          type="text" class="form-control" 
+          placeholder="Your comment" 
+          aria-describedby="button-addon2">
+  <div class="input-group-append">
+    <button class="btn btn-success" type="button" id="button-addon2" (click)="addComment(newComment.value); newComment.value=''">Ajouter</button>
   </div>
+</div>
+
+<div class="com" *ngFor="let comment of comments">
+  <p>Envoyé le {{ comment.sendDate | date:'short' }}</p>
+  <p>{{comment.message}}</p>
+  <hr>
+</div>
