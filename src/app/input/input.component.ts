@@ -15,7 +15,8 @@ export class InputComponent {
   addComment(newComment: string) {
     if (newComment) {
       this.comments.push({message: newComment,
-                          sendDate: new Date()});
+                          sendDate: new Date()
+      })
     }
   }
 
