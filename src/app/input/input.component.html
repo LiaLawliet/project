@@ -10,7 +10,7 @@
 </div>
 
 <div class="com" *ngFor="let comment of comments">
-  <p style="font-size: 10px">Envoyé le {{ comment.sendDate | date:'short' }}</p>
+  <p style="font-size: 10px">Envoyé le {{ comment.date | date:'short' }}</p>
   <p>{{comment.message}}</p>
   <hr>
 </div>

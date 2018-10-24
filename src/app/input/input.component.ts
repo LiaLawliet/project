@@ -1,23 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommentService } from '../comment.service'
 
 @Component({
   selector: 'app-input',
   templateUrl: './input.component.html',
-  styleUrls: ['./input.component.css']
+  styleUrls: ['./input.component.css'],
+  providers: [CommentService]
 })
-export class InputComponent {
+export class InputComponent implements OnInit {
 
-  comments = [
-    {
-      sendDate: new Date(),
-      message: 'test'
-    }];
+  public comments = [];
+
+  constructor(private _commentService: CommentService){}
   addComment(newComment: string) {
+    newComment = newComment.trim();
     if (newComment) {
       this.comments.push({message: newComment,
-                          sendDate: new Date()
+                          date: new Date()
       })
     }
+    /*this._commentService.insertComment().subscribe(comment => { this.comments.push(comment);
+      });
+      console.log('OKOKOKOKO');*/
+  }
+
+  ngOnInit(){
+    /*this._commentService.getAllComments().subscribe( data => this.comments = data);*/
   }
 
 }
