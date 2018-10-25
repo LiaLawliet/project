@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommentService } from '../comment.service'
+import { CommentService } from './comment.service'
 
 @Component({
   selector: 'app-input',
@@ -25,7 +25,7 @@ export class InputComponent implements OnInit {
   }
 
   ngOnInit(){
-    /*this._commentService.getAllComments().subscribe( data => this.comments = data);*/
+    this._commentService.getAllComments().subscribe( data => this.comments = data);
   }
 
 }

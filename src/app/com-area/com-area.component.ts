@@ -1,18 +1,31 @@
-import { Component } from '@angular/core';
-import { InputComponent } from './../input/input.component';
+import { Component, OnInit } from '@angular/core';
+import { QrService } from './qr.service'
 
 @Component({
   selector: 'app-com-area',
   templateUrl: './com-area.component.html',
   styleUrls: ['./com-area.component.css'],
+  providers: [QrService]
 })
-export class ComAreaComponent {
-  
-  inputComponent
+export class ComAreaComponent implements OnInit{
 
-  constructor(inputComponent: InputComponent) {
-    inputComponent=this.inputComponent;
+  qrs = [];
+  public isCollapsed;
+
+  constructor(private _qrService: QrService) {
+
   }
-  comments = this.inputComponent;
+
+  changeCollapse(){
+    this.isCollapsed = !this.isCollapsed;
+    console.log('collapsééé')
+  }
+  
+
+  ngOnInit(){
+    this._qrService.getAllQrs().subscribe( data => this.qrs = data);
+  }
+
+
 
 }

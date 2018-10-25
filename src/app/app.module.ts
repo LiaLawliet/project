@@ -8,7 +8,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { InputComponent } from './input/input.component';
 import { ComAreaComponent } from './com-area/com-area.component';
-import { CommentService } from './comment.service';
+import { CommentService } from './input/comment.service';
+import { QrService } from './com-area/qr.service';
 import { HomeComponent } from './home/home.component';
 
 
@@ -26,7 +27,7 @@ import { HomeComponent } from './home/home.component';
     HttpModule,
     NgbModule.forRoot()
   ],
-  providers: [InputComponent, CommentService],
+  providers: [InputComponent, CommentService, QrService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

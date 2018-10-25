@@ -1,4 +1,10 @@
-<div class="input-group fixed-bottom">
+<div class="com" *ngFor="let comment of comments">
+  <p style="font-size: 10px">Envoyé le {{ comment.date | date:'short' }}</p>
+  <p>{{comment.message}}</p>
+  <hr>
+</div>
+
+<div class="input-group">
   <input  #newComment
           (keyup.enter)="addComment(newComment.value); newComment.value=''"
           type="text" class="form-control" 
@@ -7,10 +13,4 @@
   <div class="input-group-append">
     <button class="btn btn-success" type="button" id="button-addon2" (click)="addComment(newComment.value); newComment.value=''">Ajouter</button>
   </div>
-</div>
-
-<div class="com" *ngFor="let comment of comments">
-  <p style="font-size: 10px">Envoyé le {{ comment.date | date:'short' }}</p>
-  <p>{{comment.message}}</p>
-  <hr>
 </div>

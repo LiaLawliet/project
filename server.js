@@ -71,3 +71,12 @@ app.route('/api/comments/:id').delete((req, res) => {
   comments.splice(req.params['id'], 1);
   res.send('Supprimé');
 });
+
+// FAQ
+
+app.route('/api/qrs').get((req, res) =>{
+  connection.query("SELECT * FROM qrs", function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+})

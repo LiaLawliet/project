@@ -7,7 +7,7 @@ import { ComAreaComponent } from './com-area/com-area.component';
 
 const routes: Routes = [{path: '',component: HomeComponent,pathMatch: 'full'},
                         {path: 'input',component: InputComponent,pathMatch: 'full'},
-                        {path: 'com-area',component: ComAreaComponent},
+                        {path: 'com-area',component: ComAreaComponent,pathMatch: 'full'},
                         {path: '**', redirectTo: ''}];
 
 @NgModule({
