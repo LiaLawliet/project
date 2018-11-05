@@ -58,8 +58,10 @@ app.route('/api/comments/:id').get((req, res) => {
 });
 
 app.route('/api/comments').post((req, res) =>{
-  comments.push(req.body)
-  res.send('success');
+  connection.query("INSERT INTO comments VALUES (null,'"+req.body.message+"','"+req.body.date+"')", function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
 })
 
 app.route('/api/comments/:id').put((req, res) => {

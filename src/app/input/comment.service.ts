@@ -15,7 +15,7 @@ export class CommentService {
     return this.http.get<Comment>('http://localhost:8000/api/comments/' + message);
   }
 
-  insertComment(comment: string): Observable<Comment> {
+  insertComment(comment: Comment): Observable<Comment> {
     return this.http.post<Comment>('http://localhost:8000/api/comments/', comment);
   }
 /*

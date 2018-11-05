@@ -1,4 +1,5 @@
 export interface Comment {
   id: number,
-  message: string
+  message: string,
+  date: Date
   }

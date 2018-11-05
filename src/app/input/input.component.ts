@@ -19,9 +19,10 @@ export class InputComponent implements OnInit {
                           date: new Date()
       })
     }
-    /*this._commentService.insertComment().subscribe(comment => { this.comments.push(comment);
-      });
-      console.log('OKOKOKOKO');*/
+    this._commentService.insertComment({id:null,message: newComment,date: new Date()}).subscribe(function(){
+      console.log('OKOKOKOKO');
+    });
+      
   }
 
   ngOnInit(){

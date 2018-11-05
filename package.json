@@ -27,6 +27,8 @@
     "cors": "^2.8.4",
     "express": "^4.16.4",
     "material-expansion-panel": "^1.0.0",
+    "mysql": "^2.16.0",
+    "npm": "^6.4.1",
     "rxjs": "~6.3.3",
     "zone.js": "~0.8.26"
   },
