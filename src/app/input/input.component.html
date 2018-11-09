@@ -1,6 +1,7 @@
-<div class="com" *ngFor="let comment of comments">
-  <p style="font-size: 10px">Envoyé le {{ comment.date | date:'short' }}</p>
+<div class="com" *ngFor="let comment of comments" [attr.id]="comment.id">
+  <p style="font-size: 10px">Envoyé le {{ comment.date | date:'short' }}  {{comment.id}}</p>
   <p>{{comment.message}}</p>
+  <button class="btn btn-danger btn-sm" (click)="delComment(comment.id)">X</button>
   <hr>
 </div>
 

@@ -1,16 +1,26 @@
+const _ = require('lodash');
 const express = require('express');
-const cors = require('cors');
+const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
 const app = express();
 
+const cors = require('cors');
 var mysql = require('mysql');
 
 app.use(cors());
+app.use(bodyParser.json());
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+app.use(expressJwt({ secret: 'todo-app-super-shared-secret' }).unless(function(req) {
+  console.log(req.originalUrl,req.method)
+  return (
+    req.originalUrl === '/api/auth'  
+    || req.originalUrl === '/api/themes' 
+    || req.originalUrl === '/api/sujets'
+    || req.originalUrl === '/api/qrs'
+    || ( req.originalUrl === '/api/comments' && req.method === 'GET')
+  );
+}));
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -24,20 +34,54 @@ connection.connect((err) => {
   console.log('Connected!');
 });
 
-const bodyParser = require('body-parser');
-
-app.use(bodyParser.json());
-
 app.listen(8000, () => {
   console.log('Server OK!');
 });
 
-comments=[{id:0, message: 'message1' }, {id:1, message: 'message76' }];
 
-app.route('/api/testdb').get((req, res) =>{
-  
-  
+/***** HOME ******/
+
+app.route('/api/themes').get((req, res) => {
+  connection.query("SELECT * FROM themes", function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
 })
+
+/***** FIN HOME ******/
+
+
+
+/***** SUJETS ******/
+
+app.route('/api/sujets').get((req, res) => {
+  connection.query("SELECT * FROM sujets", function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+})
+
+/***** FIN SUJETS ******/
+
+// app.route('/api/testdb').get((req, res) =>{
+//   connection.query("SELECT * FROM users", function (err, result) {
+//     if (err) throw err;
+//     res.send(result);
+//   });
+// });
+
+app.route('/api/auth').post((req, res) => {
+  const body = req.body;
+  const USERS = connection.query("SELECT * FROM users", function (err, result) {
+    if (err) throw err;
+    const user = result.find(user => user.email == body.email);
+    if (body.password != user.password) return res.sendStatus(401);
+
+    let token = jwt.sign({ userID: user.user_id }, 'todo-app-super-shared-secret', { expiresIn: '2h' });
+    res.send({ token });
+  });
+
+});
 
 app.route('/api/comments').get((req, res) =>{
   connection.query("SELECT * FROM comments", function (err, result) {
@@ -46,19 +90,19 @@ app.route('/api/comments').get((req, res) =>{
   });
 })
 
-app.route('/api/comments/:id').get((req, res) => {
-  comments.forEach(element => {
-    if(element.id==req.params['id']){
-      res.send(element);
-    }
-    
-  });
-  res.send({});
-  
-});
+// app.route('/api/comments/:id').get((req, res) => {
+//   comments.forEach(element => {
+//     if(element.id==req.params['id']){
+//       res.send(element);
+//     }
 
-app.route('/api/comments').post((req, res) =>{
-  connection.query("INSERT INTO comments VALUES (null,'"+req.body.message+"','"+req.body.date+"')", function (err, result) {
+//   });
+//   res.send({});
+
+// });
+
+app.route('/api/comments').post((req, res) => {
+  connection.query("INSERT INTO comments VALUES ('" + req.body.id + "','" + req.body.message + "','" + req.body.date + "')", function (err, result) {
     if (err) throw err;
     res.send(result);
   });
@@ -70,13 +114,15 @@ app.route('/api/comments/:id').put((req, res) => {
 });
 
 app.route('/api/comments/:id').delete((req, res) => {
-  comments.splice(req.params['id'], 1);
-  res.send('Supprimé');
+  connection.query("DELETE FROM comments WHERE id = '" + req.params.id + "'", function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
 });
 
 // FAQ
 
-app.route('/api/qrs').get((req, res) =>{
+app.route('/api/qrs').get((req, res) => {
   connection.query("SELECT * FROM qrs", function (err, result) {
     if (err) throw err;
     res.send(result);

@@ -1,3 +1,4 @@
-<p>
-  home works!
-</p>
+<div class="com" *ngFor="let theme of themes" [attr.id]="theme.id">
+  <a routerLink="input" href="#">{{theme.theme_name}}</a>
+  <hr>
+</div>

@@ -9,6 +9,12 @@
     <li>
       <a routerLink="com-area">FAQ</a>
     </li>
+    <li *ngIf="auth.loggedIn">
+      <a class="nav-link" (click)="logout()" href="#">Logout</a>
+    </li>
+    <li *ngIf="auth.loggedOut">
+      <a class="nav-link" [routerLink]="['login']" href="#">Se connecter</a>
+    </li>
   </ul>
 </div>
 
