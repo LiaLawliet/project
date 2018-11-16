@@ -1,4 +1,4 @@
 export interface Theme {
-    id: number,
+    id_theme: number,
     theme_name: string
 }

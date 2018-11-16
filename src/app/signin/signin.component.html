@@ -1,0 +1,20 @@
+<h4 *ngIf="error" style="color:red">{{error}}</h4>
+  <div class="form-group col-3">
+    <label for="email">Adresse Email</label>
+    <input type="text" name="email" #email class="form-control"/>
+  </div>
+  <div class="form-group col-3">
+    <label for="username">Nom d'utilisateur</label>
+    <input type="text" name="username" #username class="form-control"/>
+  </div>
+  <div class="form-group col-3">
+    <label for="password">Password</label>
+    <input type="password" name="password" #password class="form-control"/>
+  </div>
+  <div class="form-group col-3">
+    <label for="checkpassword">Check Password</label>
+    <input type="password" name="checkpassword" #checkpassword class="form-control"/>
+  </div>
+  <div class="form-group col-3">
+    <button class="btn btn-primary" (click)="addUser(email.value,username.value,password.value,checkpassword.value)" type="submit">Valider</button>
+  </div>

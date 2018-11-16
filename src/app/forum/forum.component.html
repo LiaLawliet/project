@@ -1,0 +1,7 @@
+<div>
+  <input class="rounded form-control" type="text" id="myInput">
+</div>
+<div class="elSujet" *ngFor="let sujet of sujets" [attr.id]="sujet.id">
+    <a (click)="gotoInputs(sujet.id)" >{{sujet.sujet_name}}</a>
+    <hr>
+</div>

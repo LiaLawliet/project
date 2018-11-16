@@ -1,5 +1,5 @@
 export interface Sujet {
-    id: number,
+    id_sujet: number,
     sujet_name: string,
     theme_id: number
 }

@@ -1,21 +1,27 @@
-<div>
+<div class="container">
   <ul class="navi">
     <li>
       <a routerLink="">Home</a>
     </li>
     <li>
-      <a routerLink="input">Forum</a>
+      <a [routerLink]="['forum']">Forums</a>
     </li>
     <li>
-      <a routerLink="com-area">FAQ</a>
+      <a [routerLink]="['faq']">FAQ</a>
     </li>
     <li *ngIf="auth.loggedIn">
-      <a class="nav-link" (click)="logout()" href="#">Logout</a>
+      <a class="nav-link" (click)="logout()" href="#">Logout ({{auth.getUser}})</a>
     </li>
     <li *ngIf="auth.loggedOut">
       <a class="nav-link" [routerLink]="['login']" href="#">Se connecter</a>
     </li>
+    <li *ngIf="auth.loggedOut">
+      <a class="nav-link" [routerLink]="['signin']" href="#">S'inscrire</a>
+    </li>
+    <li *ngIf="auth.loggedIn && auth.getUserType == '1'">
+      <a class="nav-link" [routerLink]="['admin']" href="#">Espace admin</a>
+    </li>
   </ul>
+  <router-outlet></router-outlet>
 </div>
 
-<router-outlet></router-outlet>

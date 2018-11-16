@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router} from '@angular/router';
 import { ThemeService } from './theme.service'
 
 @Component({
@@ -11,10 +12,13 @@ export class HomeComponent implements OnInit {
 
   public themes = [];
 
-  constructor(private _themeService: ThemeService) { }
+  constructor(private _themeService: ThemeService,private router: Router,) { }
 
   ngOnInit(){
     this._themeService.getAllThemes().subscribe( data => this.themes = data);
   }
 
+  gotoSujets(id) {
+    this.router.navigate(['theme/'+id]);
+  }
 }

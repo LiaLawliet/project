@@ -1,0 +1,12 @@
+<div>
+  <a [routerLink]="['putfaq']" href="#">Ajouter/Modifier/Supprimer une question FAQ</a>
+  <hr>
+</div>
+<button (click)="modal.getModal('myModal').open()">Open myModal</button>
+<ngx-smart-modal customClass="nsm-centered wide-modal" #myModal identifier="myModal">
+  <h1>Title</h1>
+  <p>Some stuff...</p>
+  <input type="text">
+
+  <button class="" (click)="myModal.close()">Close</button>
+</ngx-smart-modal>

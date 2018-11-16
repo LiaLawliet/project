@@ -1,0 +1,36 @@
+<div>
+  <input class="rounded form-control" type="text" id="myInput" placeholder="Rechercher">
+</div>
+<div class="row">
+  <div class="col-md-3 offset-md-9" style="text-align:center">
+    <button class="btn btn-primary text-right">Ajouter une question</button>
+  </div>
+</div>
+<hr>
+<div *ngFor="let qr of qrs" id="static-{{qr.qrs_id}}" class="elSujet">
+  <div class="row">
+  <div class="col-md-10">
+    <p>
+      {{qr.question}}
+    </p>
+  </div>
+  <div class="col-md-2">
+      <button class="btn btn-danger btn-sm"  (click)="openDelModal(qr.qrs_id)"><i class="fas fa-times"></i></button>
+      <button class="btn btn-primary btn-sm" (click)="openPutModal(qr.qrs_id,qr.question,qr.answer)"><i class="fas fa-edit"></i></button>
+  </div></div>
+  <hr>
+</div>
+<ngx-smart-modal customClass="nsm-centered" [closable]="false" #delModal identifier="delModal">
+  <h4>Voulez-vous vraiment supprimer cette question ?</h4>
+  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="delModal.close()">Annuler</button>
+  <button class="btn btn-danger" (click)="delFaq(delModal.getData())">Supprimer</button>
+</ngx-smart-modal>
+
+<ngx-smart-modal [closable]="false" #putModal identifier="putModal" >
+  <h4  *ngIf="putModal.hasData()">Modifier la question</h4>
+  <input #input1 *ngIf="putModal.hasData()" (keyup)="putModal.getData().question=input1.value" type="text" class="form-control" value="{{putModal.getData().question}}">
+  <h4  *ngIf="putModal.hasData()">Modifier la réponse</h4>
+  <textarea #input2 *ngIf="putModal.hasData()" (keyup)="putModal.getData().answer=input2.value" type="text" class="form-control" value="{{putModal.getData().answer}}">{{putModal.getData().answer}}</textarea>
+  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="putModal.close()">Annuler</button>
+  <button class="btn btn-primary" (click)="putFaq(putModal.getData().id,putModal.getData().question,putModal.getData().answer);putModal.getData().question='';putModal.getData().answer=''">Modifier</button>
+</ngx-smart-modal>

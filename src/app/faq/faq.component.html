@@ -9,9 +9,3 @@
         </ng-template>
     </ngb-panel>
 </ngb-accordion>
-
-
-<div class="elSujet" *ngFor="let sujet of sujets" [attr.id]="sujet.id">
-    <a (click)="gotoInputs(sujet.id)" >{{sujet.sujet_name}}</a>
-    <hr>
-</div>

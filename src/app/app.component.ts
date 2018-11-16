@@ -9,7 +9,9 @@ import { AuthService } from './auth.service';
 })
 export class AppComponent {
   title = 'project';
-  constructor(private auth: AuthService, private router: Router) { }
+  constructor(private auth: AuthService, private router: Router) {
+    console.log(auth)
+   }
 
   logout() {
     this.auth.logout();

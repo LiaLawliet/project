@@ -29,9 +29,12 @@
     "cors": "^2.8.4",
     "express": "^4.16.4",
     "express-jwt": "^5.3.1",
+    "jquery": "^3.3.1",
     "jsonwebtoken": "^8.3.0",
     "material-expansion-panel": "^1.0.0",
     "mysql": "^2.16.0",
+    "ngx-accordion": "0.0.17",
+    "ngx-smart-modal": "^7.1.0",
     "npm": "^6.4.1",
     "rxjs": "~6.3.3",
     "zone.js": "~0.8.26"

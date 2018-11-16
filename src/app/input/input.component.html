@@ -1,9 +1,24 @@
 <div class="com" *ngFor="let comment of comments" [attr.id]="comment.id">
-  <p style="font-size: 10px">Envoyé le {{ comment.date | date:'short' }}  {{comment.id}}</p>
+  <p style="font-size: 10px">Envoyé le {{ comment.date | date:'short' }}  {{comment.username}} {{comment.id}}</p>
   <p>{{comment.message}}</p>
-  <button class="btn btn-danger btn-sm" (click)="delComment(comment.id)">X</button>
+  <button *ngIf="isAdmin == 1 || sender == comment.sender_id" class="btn btn-danger btn-sm"  (click)="openDelModal(comment.id)"><i class="fas fa-times"></i></button>
+  <button *ngIf="sender == comment.sender_id" class="btn btn-primary btn-sm"  (click)="openPutModal(comment.id,comment.message)"><i class="fas fa-edit"></i></button>
   <hr>
+ 
 </div>
+
+<ngx-smart-modal customClass="nsm-centered" [closable]="false" #delModal identifier="delModal">
+  <h4>Voulez-vous vraiment supprimer ce commentaire ?</h4>
+  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="delModal.close()">Annuler</button>
+  <button class="btn btn-danger" (click)="delComment(delModal.getData())">Supprimer</button>
+</ngx-smart-modal>
+
+<ngx-smart-modal customClass="nsm-centered" [closable]="false" #putModal identifier="putModal" >
+  <h4  *ngIf="putModal.hasData()">Modifier ce commentaire</h4>
+  <input #input *ngIf="putModal.hasData()" (keyup)="putModal.getData().message=input.value" type="text" class="form-control" value="{{putModal.getData().message}}">
+  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="putModal.close()">Annuler</button>
+  <button class="btn btn-primary" (click)="putComment(putModal.getData().id,putModal.getData().message);putModal.getData().message=''">Modifier</button>
+</ngx-smart-modal>
 
 <div class="input-group">
   <input  #newComment
@@ -14,4 +29,4 @@
   <div class="input-group-append">
     <button class="btn btn-success" type="button" id="button-addon2" (click)="addComment(newComment.value); newComment.value=''">Ajouter</button>
   </div>
-</div>
+</div>  
