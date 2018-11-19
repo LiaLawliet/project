@@ -11,11 +11,13 @@ import { AuthGuard } from './auth.guard';
 import { SujetComponent } from './sujet/sujet.component';
 import { SigninComponent } from './signin/signin.component';
 import { AdminComponent } from './admin/admin.component';
+import { UpdateuserComponent } from './updateuser/updateuser.component';
 
 const routes: Routes = [{path: 'home',component: HomeComponent},
                         {path: 'forum', component: ForumComponent},
                         {path: 'admin', component: AdminComponent},
                         {path: 'admin/putfaq', component: PutfaqComponent},
+                        {path: 'admin/updateuser', component: UpdateuserComponent},
                         {path: 'faq', component: FaqComponent},
                         {path: 'theme/:id', component: SujetComponent},
                         {path: 'sujet/:id',component: InputComponent},

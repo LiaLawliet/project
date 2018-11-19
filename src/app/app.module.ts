@@ -25,6 +25,7 @@ import { CommentService } from './input/comment.service';
 import { AuthService } from './auth.service';
 import { PutfaqService } from './putfaq/putfaq.service';
 import { UserService } from './signin/user.service';
+import { UpdateuserService } from './updateuser/updateuser.service';
 
 import { AuthGuard } from './auth.guard';
 import { AppRoutingModule } from './app-routing.module';
@@ -66,7 +67,7 @@ export function tokenGetter() {
     NgbModule.forRoot(),
     NgxSmartModalModule.forRoot()
   ],
-  providers: [InputComponent, CommentService, QrService, AuthService,UserService, AuthGuard, PutfaqService],
+  providers: [InputComponent, CommentService, QrService, AuthService,UserService, AuthGuard, PutfaqService,UpdateuserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -46,7 +46,7 @@ app.listen(8000, () => {
 
 /***** HOME ******/
 
-app.route('/api/themes/').get((req, res) => {
+app.route('/api/themes').get((req, res) => {
   connection.query("SELECT * FROM themes", function (err, result) {
     if (err) throw err;
     res.send(result);
@@ -87,6 +87,13 @@ app.route('/api/qrs/:id').get((req, res) => {
 
 app.route('/api/qrs').get((req, res) => {
   connection.query("SELECT * FROM qrs", function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+})
+
+app.route('/api/qrs').post((req, res) => {
+  connection.query("INSERT INTO qrs VALUES (NULL,'" + req.body.theme_id + "','" + req.body.question + "','" + req.body.answer+ "')", function (err, result) {
     if (err) throw err;
     res.send(result);
   });
@@ -178,5 +185,26 @@ app.route('/api/users').post((req, res) => {
     res.send(result);
   });
 })
+
+app.route('/api/users').get((req, res) => {
+  connection.query("SELECT * FROM users", function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+})
+
+app.route('/api/users/:id').delete((req, res) => {
+  connection.query("DELETE FROM users WHERE user_id = '" + req.params.id + "'", function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+});
+
+app.route('/api/users/:id').put((req, res) => {
+  connection.query("UPDATE users SET isAdmin = '"+req.body.isAdmin+"' WHERE users.user_id = "+req.params.id, function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+});
 
 /******* FIN USERS ************/

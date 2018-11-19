@@ -1,3 +1,37 @@
-<p>
-  updateuser works!
-</p>
+<table class="table table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th>Nom d'utilisateur</th>
+      <th>Adresse email</th>
+      <th>Statut</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{user.username}}</td>
+      <td>{{user.email}}</td>
+      <td><span *ngIf="user.isAdmin == 1"><b>Administrateur</b></span>
+          <span *ngIf="user.isAdmin == 0">Standard</span></td>
+      <td>
+          <button class="btn btn-danger btn-sm"  (click)="openDelModal(user.user_id,user.username)"><i class="fas fa-times"></i></button>
+          <button class="btn btn-primary btn-sm" (click)="openPutModal(user.user_id,user.username,user.isAdmin)"><i class="fas fa-edit"></i></button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ngx-smart-modal customClass="nsm-centered" [closable]="false" #delModal identifier="delModal">
+  <h4 *ngIf="delModal.hasData()">Voulez-vous vraiment supprimer {{delModal.getData().username}} ?</h4>
+  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="delModal.close()"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
+  <button class="btn btn-danger" (click)="delUser(delModal.getData().user_id)"><i class="fas fa-check"></i> Supprimer</button>
+</ngx-smart-modal>
+
+<ngx-smart-modal [closable]="false" #putModal identifier="putModal" >
+  <h4  *ngIf="putModal.hasData()">Modifier le statut de l'utilisateur {{putModal.getData().username}}</h4>
+  <label for="myCheck">Administrateur</label>{{myCheck}}
+  <input *ngIf="putModal.hasData()" type="checkbox" [(ngModel)]="myCheck">
+  <br>
+  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="putModal.close()"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
+  <button *ngIf="putModal.hasData()" class="btn btn-primary" (click)="putUser(putModal.getData().id,myCheck.checked)"><i class="fas fa-check"></i> Valider</button>
+</ngx-smart-modal>

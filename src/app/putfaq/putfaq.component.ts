@@ -15,6 +15,7 @@ export class PutfaqComponent implements OnInit {
   constructor(private _putfaqService: PutfaqService,private router: Router,public modal: NgxSmartModalService,private _authService: AuthService) { }
 
   private qrs = [];
+  private themes = [];
 
   openDelModal(id) {
     this.modal.resetModalData('delModal')
@@ -32,6 +33,10 @@ export class PutfaqComponent implements OnInit {
     this.modal.resetModalData('putModal')
     this.modal.setModalData(obj, 'putModal');
     this.modal.getModal('putModal').open();
+  }
+
+  openAddModal() {
+    this.modal.getModal('addModal').open();
   }
 
   delFaq(id) {
@@ -76,10 +81,42 @@ export class PutfaqComponent implements OnInit {
     }
   }
 
+  addFaq(theme_id: number,question: string, answer: string) {
+    if (this._authService.loggedOut) {
+      this.router.navigate(['login'])
+    } else {
+      let qrs = this.qrs
+      let idPlus = this.getId();
+      this._putfaqService.insertFaq(theme_id,question,answer).subscribe(function (data) {
+        console.log(data);
+        qrs.push({
+          qrs_id: idPlus,
+          theme_id: theme_id,
+          question: question,
+          answer: answer
+        })
+        console.log("success");
+      });
+    this.modal.getModal('addModal').close();
+    }
+  }
+
+  getId() {
+    if (this.qrs.length != 0) {
+      return this.qrs.reduce((max, p) => p.qrs_id > max ? p.qrs_id : max, this.qrs[0].qrs_id) + 1;
+    } else {
+      return 0;
+    }
+  }
+
   ngOnInit() {
 
     this._putfaqService.getAllQrs().subscribe(data=>{this.qrs = data
     console.log(this.qrs)
+    });
+
+    this._putfaqService.getAllThemes().subscribe(data=>{this.themes = data
+    console.log(this.themes)
     });
     
     $("#myInput").on("keyup", function() {
