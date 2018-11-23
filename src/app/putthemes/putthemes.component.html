@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="col-md-3 offset-md-9" style="text-align:center">
+    <button class="btn btn-primary text-right" (click)="openAddModal()"><i class="fas fa-plus"></i> Ajouter un thème</button>
+  </div>
+</div>
+
+<div *ngFor="let theme of themes" id="static-{{theme.id}}" class="elSujet">
+  <div class="row">
+  <div class="col-md-10">
+    <p>
+      {{theme.theme_name}}
+    </p>
+  </div>
+  <div class="col-md-2">
+      <button class="btn btn-primary btn-sm" (click)="openPutModal(theme.id,theme.theme_name)"><i class="fas fa-edit"></i></button>
+  </div></div>
+  <hr>
+</div>
+
+<ngx-smart-modal [closable]="false" #putModal identifier="putModal" >
+  <h4>Modifier le nom du thème</h4>
+  <input #input *ngIf="putModal.hasData()" (keyup)="putModal.getData().theme_name=input.value" type="text" class="form-control" value="{{putModal.getData().theme_name}}">
+  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="putModal.close();putModal.getData().theme_name=''"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
+  <button class="btn btn-primary" (click)="putTheme(putModal.getData().id,putModal.getData().theme_name);putModal.getData().theme_name='';"><i class="fas fa-check"></i> Modifier</button>
+</ngx-smart-modal>
+
+<ngx-smart-modal [closable]="false" #addModal identifier="addModal">
+  <h4>Ajouter un thème</h4>
+  <input #inputQ type="text" class="form-control"  placeholder="Nom du thème souhaité">
+  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="addModal.close()"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
+  <button class="btn btn-primary" (click)="addTheme(inputQ.value);"><i class="fas fa-check"></i> Ajouter</button>
+</ngx-smart-modal>

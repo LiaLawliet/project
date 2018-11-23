@@ -12,12 +12,12 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 export class UpdateuserComponent implements OnInit {
 
   private users = [];
-  myCheck:any;
-
+  
   constructor(private _updateuserService:UpdateuserService,private router:Router,private _authService:AuthService, private modal:NgxSmartModalService) {
-
+    
   }
-
+  
+  public loggedUser = parseInt(this._authService.getUserID);
   openDelModal(id,username) {
     let obj: Object = {
       'user_id': id,
@@ -30,12 +30,14 @@ export class UpdateuserComponent implements OnInit {
   }
 
   openPutModal(id, username, isAdmin) {
+    this.modal.resetModalData('putModal')
     let obj: Object = {
       'user_id': id,
       'username': username,
-      'isAdmin':isAdmin
+      'isAdmin':isAdmin,
+      'myCheck':isAdmin==1
     }
-    this.modal.resetModalData('putModal')
+    
     this.modal.setModalData(obj, 'putModal');
     this.modal.getModal('putModal').open();
   }

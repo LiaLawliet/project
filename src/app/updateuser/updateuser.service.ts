@@ -23,8 +23,8 @@ export class UpdateuserService {
 //   return this.http.post<User>('http://localhost:8000/api/users', user);
 // }
 
-  updateUser(id: number,isAdmin: number): Observable<void> {
-    return this.http.put<void>('http://localhost:8000/api/users/' + id, isAdmin);
+  updateUser(id: number,isAdmin: number) {
+    return this.http.put('http://localhost:8000/api/users/'+id, {admin:isAdmin});
   }
 
   deleteUser(id: number){

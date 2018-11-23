@@ -7,16 +7,20 @@ import { ForumComponent } from './forum/forum.component';
 import { LoginComponent } from './login/login.component';
 import { FaqComponent } from './faq/faq.component';
 import { PutfaqComponent } from './putfaq/putfaq.component';
+import { PutthemesComponent } from './putthemes/putthemes.component';
 import { AuthGuard } from './auth.guard';
 import { SujetComponent } from './sujet/sujet.component';
 import { SigninComponent } from './signin/signin.component';
 import { AdminComponent } from './admin/admin.component';
 import { UpdateuserComponent } from './updateuser/updateuser.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [{path: 'home',component: HomeComponent},
                         {path: 'forum', component: ForumComponent},
                         {path: 'admin', component: AdminComponent},
+                        {path: 'profile', component: ProfileComponent},
                         {path: 'admin/putfaq', component: PutfaqComponent},
+                        {path: 'admin/putthemes', component: PutthemesComponent},
                         {path: 'admin/updateuser', component: UpdateuserComponent},
                         {path: 'faq', component: FaqComponent},
                         {path: 'theme/:id', component: SujetComponent},

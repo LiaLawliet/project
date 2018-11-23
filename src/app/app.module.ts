@@ -19,13 +19,17 @@ import { SigninComponent } from './signin/signin.component';
 import { AdminComponent } from './admin/admin.component';
 import { UpdateuserComponent } from './updateuser/updateuser.component';
 import { PutfaqComponent } from './putfaq/putfaq.component';
+import { PutthemesComponent } from './putthemes/putthemes.component';
+import { ProfileComponent } from './profile/profile.component';
 
 import { QrService } from './sujet/qr.service';
 import { CommentService } from './input/comment.service';
 import { AuthService } from './auth.service';
 import { PutfaqService } from './putfaq/putfaq.service';
+import { PutthemesService } from './putthemes/putthemes.service';
 import { UserService } from './signin/user.service';
 import { UpdateuserService } from './updateuser/updateuser.service';
+import { ProfileService } from './profile/profile.service';
 
 import { AuthGuard } from './auth.guard';
 import { AppRoutingModule } from './app-routing.module';
@@ -48,6 +52,8 @@ export function tokenGetter() {
     AdminComponent,
     UpdateuserComponent,
     PutfaqComponent,
+    PutthemesComponent,
+    ProfileComponent,
     
   ],
   imports: [
@@ -67,7 +73,7 @@ export function tokenGetter() {
     NgbModule.forRoot(),
     NgxSmartModalModule.forRoot()
   ],
-  providers: [InputComponent, CommentService, QrService, AuthService,UserService, AuthGuard, PutfaqService,UpdateuserService],
+  providers: [InputComponent, CommentService, QrService, AuthService,UserService, AuthGuard, PutfaqService,UpdateuserService, PutthemesService, ProfileService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

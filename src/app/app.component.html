@@ -18,6 +18,9 @@
     <li *ngIf="auth.loggedOut">
       <a class="nav-link" [routerLink]="['signin']" href="#">S'inscrire</a>
     </li>
+    <li *ngIf="auth.loggedIn">
+      <a class="nav-link" [routerLink]="['profile']" href="#">Profil</a>
+    </li>
     <li *ngIf="auth.loggedIn && auth.getUserType == '1'">
       <a class="nav-link" [routerLink]="['admin']" href="#">Espace admin</a>
     </li>

@@ -11,7 +11,20 @@
 </ngb-accordion>
 
 
+<div class="row">
+    <div class="col-md-3 offset-md-9" style="text-align:center">
+      <button class="btn btn-primary text-right" (click)="openAddModal()"><i class="fas fa-plus"></i> Ajouter un sujet de discussion</button>
+    </div>
+  </div>
+
+
 <div class="elSujet" *ngFor="let sujet of sujets" [attr.id]="sujet.id">
     <a (click)="gotoInputs(sujet.id)" >{{sujet.sujet_name}}</a>
     <hr>
 </div>
+<ngx-smart-modal [closable]="false" #addModal identifier="addModal">
+    <h4>Titre du sujet</h4>
+    <input #inputQ id="testest" type="text" class="form-control"  placeholder="Votre question">
+    <button style="margin:10px 10px;" class="btn btn-secondary" (click)="addModal.close()"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
+    <button class="btn btn-primary" (click)="addSujet(inputQ.value);"><i class="fas fa-check"></i> Ajouter</button>
+</ngx-smart-modal>

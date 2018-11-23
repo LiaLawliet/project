@@ -44,10 +44,24 @@ app.listen(8000, () => {
 });
 
 
-/***** HOME ******/
+/***** THEMES ******/
 
 app.route('/api/themes').get((req, res) => {
   connection.query("SELECT * FROM themes", function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+})
+
+app.route('/api/themes').post((req, res) => {
+  connection.query("INSERT INTO themes VALUES (NULL,'" + req.body.theme_name + "')", function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+})
+
+app.route('/api/themes/:id').put((req, res) => {
+  connection.query("UPDATE themes SET theme_name = '"+req.body.theme_name+"' WHERE themes.id = "+req.params.id, function (err, result) {
     if (err) throw err;
     res.send(result);
   });
@@ -66,6 +80,12 @@ app.route('/api/sujets/:id').get((req, res) => {
   });
 })
 
+app.route('/api/sujets').post((req, res) => {
+  connection.query("INSERT INTO sujets VALUES (NULL,'" + req.body.theme_id + "','" + req.body.sujet_name + "')", function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+})
 
 app.route('/api/sujets').get((req, res) => {
   connection.query("SELECT * FROM sujets", function (err, result) {
@@ -132,7 +152,7 @@ app.route('/api/auth').post((req, res) => {
     if (body.password != user.password) return res.sendStatus(401);
 
     let token = jwt.sign({ userID: user.user_id }, 'todo-app-super-shared-secret', { expiresIn: '2h' });
-    res.send({ isAdmin: user.isAdmin ,username: user.username,user_id:user.user_id,token });
+    res.send({password:user.password, email: user.email, isAdmin: user.isAdmin ,username: user.username,user_id:user.user_id,token });
   });
 
 });
@@ -201,7 +221,28 @@ app.route('/api/users/:id').delete((req, res) => {
 });
 
 app.route('/api/users/:id').put((req, res) => {
-  connection.query("UPDATE users SET isAdmin = '"+req.body.isAdmin+"' WHERE users.user_id = "+req.params.id, function (err, result) {
+  connection.query("UPDATE users SET isAdmin = "+req.body.admin+" WHERE users.user_id = "+req.params.id, function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+});
+
+app.route('/api/users/username/:id').put((req, res) => {
+  connection.query("UPDATE users SET username = '"+req.body.username+"' WHERE users.user_id = "+req.params.id, function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+});
+
+app.route('/api/users/email/:id').put((req, res) => {
+  connection.query("UPDATE users SET email = '"+req.body.email+"' WHERE users.user_id = "+req.params.id, function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+});
+
+app.route('/api/users/password/:id').put((req, res) => {
+  connection.query("UPDATE users SET password = '"+req.body.password+"' WHERE users.user_id = "+req.params.id, function (err, result) {
     if (err) throw err;
     res.send(result);
   });

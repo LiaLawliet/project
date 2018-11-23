@@ -14,8 +14,8 @@
       <td><span *ngIf="user.isAdmin == 1"><b>Administrateur</b></span>
           <span *ngIf="user.isAdmin == 0">Standard</span></td>
       <td>
-          <button class="btn btn-danger btn-sm"  (click)="openDelModal(user.user_id,user.username)"><i class="fas fa-times"></i></button>
-          <button class="btn btn-primary btn-sm" (click)="openPutModal(user.user_id,user.username,user.isAdmin)"><i class="fas fa-edit"></i></button>
+          <button *ngIf="user.user_id != loggedUser" class="btn btn-danger btn-sm"  (click)="openDelModal(user.user_id,user.username)"><i class="fas fa-times"></i></button>
+          <button *ngIf="user.user_id != loggedUser" class="btn btn-primary btn-sm" (click)="openPutModal(user.user_id,user.username,user.isAdmin)"><i class="fas fa-edit"></i></button>
       </td>
     </tr>
   </tbody>
@@ -29,9 +29,9 @@
 
 <ngx-smart-modal [closable]="false" #putModal identifier="putModal" >
   <h4  *ngIf="putModal.hasData()">Modifier le statut de l'utilisateur {{putModal.getData().username}}</h4>
-  <label for="myCheck">Administrateur</label>{{myCheck}}
-  <input *ngIf="putModal.hasData()" type="checkbox" [(ngModel)]="myCheck">
+  <label for="myCheck" *ngIf="putModal.hasData()">Administrateur</label>
+  <input *ngIf="putModal.hasData()" [ngModel]="putModal.getData().myCheck" (change)="putModal.getData().myCheck=!putModal.getData().myCheck"  type="checkbox">
   <br>
   <button style="margin:10px 10px;" class="btn btn-secondary" (click)="putModal.close()"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
-  <button *ngIf="putModal.hasData()" class="btn btn-primary" (click)="putUser(putModal.getData().id,myCheck.checked)"><i class="fas fa-check"></i> Valider</button>
+  <button *ngIf="putModal.hasData()" class="btn btn-primary" (click)="putUser(putModal.getData().user_id,putModal.getData().myCheck)"><i class="fas fa-check"></i> Valider</button>
 </ngx-smart-modal>

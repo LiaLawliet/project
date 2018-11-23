@@ -1,0 +1,60 @@
+<p>
+  
+</p>
+<div class="row">
+  <div class="col-md-10">
+    <p>
+      {{auth.getUser}}
+    </p>
+  </div>
+  <div class="col-md-2">
+      <button class="btn btn-primary btn-sm" (click)="openUsernameModal(auth.getUser)"><i class="fas fa-edit"></i></button>
+  </div>
+</div>
+
+<ngx-smart-modal [closable]="false" #usernameModal identifier="usernameModal" >
+  <h4  *ngIf="usernameModal.hasData()">Modifier le nom d'utilisateur</h4>
+  <input #input1 *ngIf="usernameModal.hasData()" (keyup)="usernameModal.getData().username=input1.value" type="text" class="form-control" value="{{usernameModal.getData().username}}">
+  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="usernameModal.close();usernameModal.getData().username=''"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
+  <button class="btn btn-primary" (click)="putUsername(usernameModal.getData().username);usernameModal.getData().username=''"><i class="fas fa-check"></i> Modifier</button>
+</ngx-smart-modal>
+
+<div class="row">
+  <div class="col-md-10">
+    <p>
+      {{auth.getUserEmail}}
+    </p>
+  </div>
+  <div class="col-md-2">
+      <button class="btn btn-primary btn-sm" (click)="openEmailModal(auth.getUserEmail)"><i class="fas fa-edit"></i></button>
+  </div>
+</div>
+
+<ngx-smart-modal [closable]="false" #emailModal identifier="emailModal" >
+  <h4  *ngIf="emailModal.hasData()">Modifier votre adresse email</h4>
+  <input #input1 *ngIf="emailModal.hasData()" (keyup)="emailModal.getData().email=input1.value" type="text" class="form-control" value="{{emailModal.getData().email}}">
+  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="emailModal.close();emailModal.getData().email=''"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
+  <button class="btn btn-primary" (click)="putEmail(emailModal.getData().email);emailModal.getData().email=''"><i class="fas fa-check"></i> Modifier</button>
+</ngx-smart-modal>
+
+<div class="row">
+  <div class="col-md-10">
+    <button class="btn btn-primary" (click)="openPasswordModal(auth.getUserPassword)">
+      Modifier le mot de passe {{auth.getPassword}}
+    </button>
+  </div>
+</div>
+
+<ngx-smart-modal [closable]="false" #passwordModal identifier="passwordModal" >
+  <h4  *ngIf="passwordModal.hasData()">Modifier votre mot de passe</h4>
+  <h6 style="color: red">{{error2}}</h6>
+  <label for="password">Votre mot de passe actuel</label>
+  <input #password *ngIf="passwordModal.hasData()" (keyup)="passwordModal.getData().password=password.value" type="password" class="form-control" value="{{passwordModal.getData().password}}">
+  <h6 style="color: red">{{error1}}</h6>
+  <label for="newPassword">Votre nouveau mot de passe</label>
+  <input #newPassword *ngIf="passwordModal.hasData()" (keyup)="passwordModal.getData().newPassword=newPassword.value" type="password" class="form-control" value="{{passwordModal.getData().newPassword}}">
+  <label for="checkPassword">Confirmez ce mot de passe</label>
+  <input #checkPassword *ngIf="passwordModal.hasData()" (keyup)="passwordModal.getData().checkPassword=checkPassword.value" type="password" class="form-control" value="{{passwordModal.getData().checkPassword}}">
+  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="passwordModal.close();passwordModal.getData().password='';passwordModal.getData().newPassword='';passwordModal.getData().checkPassword=''"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
+  <button *ngIf="passwordModal.hasData()" class="btn btn-primary" (click)="putPassword(passwordModal.getData().password,passwordModal.getData().newPassword,passwordModal.getData().checkPassword);passwordModal.getData().password='';passwordModal.getData().newPassword='';passwordModal.getData().checkPassword=''"><i class="fas fa-check"></i> Modifier</button>
+</ngx-smart-modal>

@@ -10,4 +10,5 @@ export class ThemeService {
   getAllThemes(): Observable<Theme[]> {
     return this.http.get<Theme[]>('http://localhost:8000/api/themes');
   }
+
 }
