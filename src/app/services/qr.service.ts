@@ -1,28 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Putfaq } from './putfaq';
-import { Theme } from './theme';
+import { Qr } from './qr';
 
 @Injectable()
-export class PutfaqService {
+export class QrService {
   constructor(private http: HttpClient) {}
 
-  getAllQrs(): Observable<Putfaq[]> {
-    return this.http.get<Putfaq[]>('http://localhost:8000/api/qrs');
-  }
-
-  getAllThemes(): Observable<Theme[]> {
-    return this.http.get<Theme[]>('http://localhost:8000/api/themes');
+  getAllQrs(): Observable<Qr[]> {
+    return this.http.get<Qr[]>('http://localhost:8000/api/qrs');
   }
   
-  getQrs(id): Observable<Putfaq[]> {
-    return this.http.get<Putfaq[]>('http://localhost:8000/api/qrs/'+id);
+  getQrs(id): Observable<Qr[]> {
+    return this.http.get<Qr[]>('http://localhost:8000/api/qrs/'+id);
   }
-
-//   getComment(message: string): Observable<Comment> {
-//     return this.http.get<Comment>('http://localhost:8000/api/comments/' + message);
-//   }
 
   insertFaq(theme_id : number, question: string, answer: string): Observable<void> {
     return this.http.post<void>('http://localhost:8000/api/qrs/', {theme_id : theme_id ,question:question, answer:answer});

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PutfaqService } from './putfaq.service';
+import { ThemeService } from '../services/theme.service';
+import { QrService } from '../services/qr.service';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
@@ -12,7 +13,11 @@ import * as $ from 'jquery';
 })
 export class PutfaqComponent implements OnInit {
 
-  constructor(private _putfaqService: PutfaqService,private router: Router,public modal: NgxSmartModalService,private _authService: AuthService) { }
+  constructor(private _qrService: QrService,
+              private router: Router,
+              public modal: NgxSmartModalService,
+              private _themeService: ThemeService,
+              private _authService: AuthService) { }
 
   private qrs = [];
   private themes = [];
@@ -43,7 +48,7 @@ export class PutfaqComponent implements OnInit {
     if (this._authService.loggedOut) {
       this.router.navigate(['login'])
     } else {
-      this._putfaqService.deleteFaq(id).subscribe(() => {
+      this._qrService.deleteFaq(id).subscribe(() => {
         for (var i = 0; i < this.qrs.length; i++) {
           console.log(this.qrs[i], id)
           if (this.qrs[i].qrs_id == id) {
@@ -65,7 +70,7 @@ export class PutfaqComponent implements OnInit {
       this.router.navigate(['login'])
     } else {
       console.log()
-      this._putfaqService.updateFaq(id, question, answer).subscribe(() => {
+      this._qrService.updateFaq(id, question, answer).subscribe(() => {
        
         for (var i = 0; i < this.qrs.length; i++) {
           if (this.qrs[i].qrs_id == id) {
@@ -87,7 +92,7 @@ export class PutfaqComponent implements OnInit {
     } else {
       let qrs = this.qrs
       let idPlus = this.getId();
-      this._putfaqService.insertFaq(theme_id,question,answer).subscribe(function (data) {
+      this._qrService.insertFaq(theme_id,question,answer).subscribe(function (data) {
         console.log(data);
         qrs.push({
           qrs_id: idPlus,
@@ -111,11 +116,11 @@ export class PutfaqComponent implements OnInit {
 
   ngOnInit() {
 
-    this._putfaqService.getAllQrs().subscribe(data=>{this.qrs = data
+    this._qrService.getAllQrs().subscribe(data=>{this.qrs = data
     console.log(this.qrs)
     });
 
-    this._putfaqService.getAllThemes().subscribe(data=>{this.themes = data
+    this._themeService.getAllThemes().subscribe(data=>{this.themes = data
     console.log(this.themes)
     });
     

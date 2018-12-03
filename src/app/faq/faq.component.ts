@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { QrService } from '../sujet/qr.service';
+import { QrService } from '../services/qr.service';
 import * as $ from 'jquery';
 
 @Component({

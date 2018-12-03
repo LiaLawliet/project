@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router} from '@angular/router';
-import { ThemeService } from './theme.service';
+import { ThemeService } from '../services/theme.service';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { AuthService } from '../auth.service';
 

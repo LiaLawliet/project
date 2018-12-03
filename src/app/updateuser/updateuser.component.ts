@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UpdateuserService } from './updateuser.service';
+import { UserService } from '../services/user.service';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { NgxSmartModalService } from 'ngx-smart-modal';
@@ -13,7 +13,7 @@ export class UpdateuserComponent implements OnInit {
 
   private users = [];
   
-  constructor(private _updateuserService:UpdateuserService,private router:Router,private _authService:AuthService, private modal:NgxSmartModalService) {
+  constructor(private _userService:UserService,private router:Router,private _authService:AuthService, private modal:NgxSmartModalService) {
     
   }
   
@@ -46,7 +46,7 @@ export class UpdateuserComponent implements OnInit {
     if (this._authService.loggedOut) {
       this.router.navigate(['login'])
     } else {
-      this._updateuserService.deleteUser(id).subscribe(() => {
+      this._userService.deleteUser(id).subscribe(() => {
         for (var i = 0; i < this.users.length; i++) {
           if (this.users[i].user_id == id) {
             
@@ -72,7 +72,7 @@ export class UpdateuserComponent implements OnInit {
       }else{
         admin = 0;
       }
-      this._updateuserService.updateUser(id, admin).subscribe(() => {
+      this._userService.updateUser(id, admin).subscribe(() => {
        
         for (var i = 0; i < this.users.length; i++) {
           if (this.users[i].user_id == id) {
@@ -88,7 +88,7 @@ export class UpdateuserComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._updateuserService.getAllUsers().subscribe(data => this.users = data);
+    this._userService.getAllUsers().subscribe(data => this.users = data);
   }
 
 }

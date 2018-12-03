@@ -19,12 +19,16 @@
 
 
 <div class="elSujet" *ngFor="let sujet of sujets" [attr.id]="sujet.id">
-    <a (click)="gotoInputs(sujet.id)" >{{sujet.sujet_name}}</a>
+    <a (click)="gotoInputs(sujet.id)" ><span *ngIf="sujet.resolu == 1">[Résolu]</span> {{sujet.sujet_name}}</a>
     <hr>
 </div>
 <ngx-smart-modal [closable]="false" #addModal identifier="addModal">
+    <h4>Thème</h4>
+    <select #selectTheme>
+        <option *ngFor="let theme of themes" value="{{theme.id}}">{{theme.theme_name}}</option>
+    </select>
     <h4>Titre du sujet</h4>
     <input #inputQ id="testest" type="text" class="form-control"  placeholder="Votre question">
     <button style="margin:10px 10px;" class="btn btn-secondary" (click)="addModal.close()"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
-    <button class="btn btn-primary" (click)="addSujet(inputQ.value);"><i class="fas fa-check"></i> Ajouter</button>
+    <button class="btn btn-primary" (click)="addSujet(selectTheme.value,inputQ.value);"><i class="fas fa-check"></i> Ajouter</button>
 </ngx-smart-modal>

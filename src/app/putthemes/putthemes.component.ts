@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PutthemesService } from './putthemes.service';
+import { ThemeService } from '../services/theme.service';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { AuthService } from '../auth.service';
 import { Router} from '@angular/router';
@@ -12,7 +12,10 @@ import { Router} from '@angular/router';
 export class PutthemesComponent implements OnInit {
   private themes = [];
 
-  constructor(private router: Router,private _authService: AuthService,private _themeService: PutthemesService,private modal: NgxSmartModalService) { }
+  constructor(private router: Router,
+              private _authService: AuthService,
+              private _themeService: ThemeService,
+              private modal: NgxSmartModalService) { }
 
   openAddModal() {
     this.modal.getModal('addModal').open();

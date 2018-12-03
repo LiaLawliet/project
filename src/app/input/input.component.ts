@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { CommentService } from './comment.service'
+import { CommentService } from '../services/comment.service'
+import { SujetService } from '../services/sujet.service'
 import { switchMap } from 'rxjs/operators';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { identifierModuleUrl } from '@angular/compiler';
+import { Sujet } from '../services/sujet';
 
 @Component({
   selector: 'app-input',
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.css'],
-  providers: [CommentService]
+  providers: [CommentService,SujetService]
 })
 export class InputComponent implements OnInit {
 
@@ -18,12 +19,20 @@ export class InputComponent implements OnInit {
     private route: ActivatedRoute,
     private _commentService: CommentService,
     private _authService: AuthService,
+    private _sujetService: SujetService,
     private router: Router,
-    public modal: NgxSmartModalService) { }
+    public modal: NgxSmartModalService) {
+      //this.sujet[0]={id:null,sujet_name:null,resolu:null,theme_id:null,creator:null}
+      
+
+     }
 
 
   //public pageID = parseInt(this.params.get('id'));
   public allComments = [];
+  public userID = this._authService.getUserID
+  public param = this.route.snapshot.paramMap.get('id');
+  public sujet : Array<Sujet> = [];
   public comments = [];
   public sender = parseInt(this._authService.getUserID);
   public isAdmin = this._authService.getUserType;
@@ -137,11 +146,18 @@ export class InputComponent implements OnInit {
     }
   }
 
+  clearSujet() {
+      this._sujetService.resolveSujet(this.sujet[0].id,1).subscribe(() => {
+        this.modal.getModal('clearModal').close();
+        location.reload();
+        console.log("success");
+      });
+  }
+
   ngOnInit() {
-    this.route.paramMap.pipe(
-      switchMap((params: ParamMap) =>
-        this._commentService.getComments(parseInt(params.get('id'))))
-    ).subscribe(data => this.comments = data);
+    this._sujetService.getSujet(parseInt(this.param)).subscribe(data => (this.sujet = data,console.log(this.sujet)));
+
+    this._commentService.getComments(parseInt(this.param)).subscribe(data => this.comments = data);
 
     this._commentService.getAllComments().subscribe(data => this.allComments = data);
   }

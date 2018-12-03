@@ -22,14 +22,11 @@ import { PutfaqComponent } from './putfaq/putfaq.component';
 import { PutthemesComponent } from './putthemes/putthemes.component';
 import { ProfileComponent } from './profile/profile.component';
 
-import { QrService } from './sujet/qr.service';
-import { CommentService } from './input/comment.service';
+import { QrService } from './services/qr.service';
+import { CommentService } from './services/comment.service';
 import { AuthService } from './auth.service';
-import { PutfaqService } from './putfaq/putfaq.service';
-import { PutthemesService } from './putthemes/putthemes.service';
-import { UserService } from './signin/user.service';
-import { UpdateuserService } from './updateuser/updateuser.service';
-import { ProfileService } from './profile/profile.service';
+import { UserService } from './services/user.service';
+import { ProfileService } from './services/profile.service';
 
 import { AuthGuard } from './auth.guard';
 import { AppRoutingModule } from './app-routing.module';
@@ -73,7 +70,7 @@ export function tokenGetter() {
     NgbModule.forRoot(),
     NgxSmartModalModule.forRoot()
   ],
-  providers: [InputComponent, CommentService, QrService, AuthService,UserService, AuthGuard, PutfaqService,UpdateuserService, PutthemesService, ProfileService],
+  providers: [InputComponent, CommentService, QrService, AuthService,UserService, AuthGuard, ProfileService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

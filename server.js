@@ -80,8 +80,15 @@ app.route('/api/sujets/:id').get((req, res) => {
   });
 })
 
+app.route('/api/sujets/sujet/:id').get((req, res) => {
+  connection.query("SELECT * FROM sujets WHERE sujets.id="+req.params.id, function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+})
+
 app.route('/api/sujets').post((req, res) => {
-  connection.query("INSERT INTO sujets VALUES (NULL,'" + req.body.theme_id + "','" + req.body.sujet_name + "')", function (err, result) {
+  connection.query("INSERT INTO sujets VALUES (NULL,'" + req.body.theme_id + "','" + req.body.sujet_name + "','0','" + req.body.creator + "')", function (err, result) {
     if (err) throw err;
     res.send(result);
   });
@@ -89,6 +96,13 @@ app.route('/api/sujets').post((req, res) => {
 
 app.route('/api/sujets').get((req, res) => {
   connection.query("SELECT * FROM sujets", function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+})
+
+app.route('/api/sujets/:id').put((req, res) => {
+  connection.query("UPDATE sujets SET resolu = "+req.body.resolve+" WHERE sujets.id = "+req.params.id, function (err, result) {
     if (err) throw err;
     res.send(result);
   });

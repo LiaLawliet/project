@@ -28,9 +28,9 @@
 </ngx-smart-modal>
 
 <ngx-smart-modal [closable]="false" #putModal identifier="putModal" >
-  <h4  *ngIf="putModal.hasData()">Modifier le statut de l'utilisateur {{putModal.getData().username}}</h4>
-  <label for="myCheck" *ngIf="putModal.hasData()">Administrateur</label>
-  <input *ngIf="putModal.hasData()" [ngModel]="putModal.getData().myCheck" (change)="putModal.getData().myCheck=!putModal.getData().myCheck"  type="checkbox">
+  <h4 *ngIf="putModal.hasData()">Modifier le statut de l'utilisateur {{putModal.getData().username}}</h4>
+  <input id="myCheck" *ngIf="putModal.hasData()" [ngModel]="putModal.getData().myCheck" (change)="putModal.getData().myCheck=!putModal.getData().myCheck"  type="checkbox">
+  <label for="myCheck">Administrateur</label>
   <br>
   <button style="margin:10px 10px;" class="btn btn-secondary" (click)="putModal.close()"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
   <button *ngIf="putModal.hasData()" class="btn btn-primary" (click)="putUser(putModal.getData().user_id,putModal.getData().myCheck)"><i class="fas fa-check"></i> Valider</button>

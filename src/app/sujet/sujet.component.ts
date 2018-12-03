@@ -1,10 +1,11 @@
 import { switchMap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { SujetService } from './sujet.service';
+import { SujetService } from '../services/sujet.service';
+import { ThemeService } from '../services/theme.service';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { AuthService } from '../auth.service';
-import { QrService } from './qr.service';
+import { QrService } from '../services/qr.service';
 import * as $ from 'jquery';
 
 
@@ -12,7 +13,7 @@ import * as $ from 'jquery';
   selector: 'app-sujet',
   templateUrl: './sujet.component.html',
   styleUrls: ['./sujet.component.css'],
-  providers: [SujetService, QrService]
+  providers: [SujetService, QrService, ThemeService]
 })
 
 export class SujetComponent implements OnInit {
@@ -26,6 +27,7 @@ export class SujetComponent implements OnInit {
               private _qrService: QrService,
               private route: ActivatedRoute,
               private router: Router,
+              private _themeService: ThemeService,
               private _authService: AuthService,
               private modal: NgxSmartModalService) {}
   
@@ -43,12 +45,14 @@ export class SujetComponent implements OnInit {
       let sujets = this.sujets
       let param = this.param
       let idPlus = this.getId();
-      this._sujetService.insertSujet(parseInt(param),sujet_name).subscribe(function (data) {
+      this._sujetService.insertSujet(parseInt(param),sujet_name,parseInt(this._authService.getUserID)).subscribe(function (data) {
         console.log(data);
           sujets.push({
             id: idPlus,
             theme_id: parseInt(param),
-            sujet_name:sujet_name
+            sujet_name:sujet_name,
+            resolu : 0,
+            creator:parseInt(this._authService.getUserID)
           })
         console.log("success");
       });
@@ -68,7 +72,7 @@ export class SujetComponent implements OnInit {
 
     console.log(this.param)
 
-    this._sujetService.getAllThemes().subscribe(data=>{this.themes = data
+    this._themeService.getAllThemes().subscribe(data=>{this.themes = data
       console.log(this.themes)
       });
 

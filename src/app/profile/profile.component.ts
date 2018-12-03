@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Router } from '@angular/router';
-import { ProfileService } from './profile.service';
+import { ProfileService } from '../services/profile.service';
 
 @Component({
   selector: 'app-profile',

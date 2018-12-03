@@ -20,7 +20,14 @@
   <button class="btn btn-primary" (click)="putComment(putModal.getData().id,putModal.getData().message);putModal.getData().message=''">Modifier</button>
 </ngx-smart-modal>
 
-<div class="input-group">
+<ngx-smart-modal customClass="nsm-centered" [closable]="false" #clearModal identifier="clearModal" >
+  <h4>Voulez-vous vraiment fermer ce sujet ?</h4>
+  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="clearModal.close()">Annuler</button>
+  <button class="btn btn-success" (click)="clearSujet()">Valider</button>
+</ngx-smart-modal>
+
+<div *ngIf=" sujet.length>0 ">
+<div *ngIf="_authService.loggedIn == true && sujet[0].resolu == 0 " class="input-group">
   <input  #newComment
           (keyup.enter)="addComment(newComment.value); newComment.value=''"
           type="text" class="form-control" 
@@ -29,4 +36,7 @@
   <div class="input-group-append">
     <button class="btn btn-success" type="button" id="button-addon2" (click)="addComment(newComment.value); newComment.value=''">Ajouter</button>
   </div>
-</div>  
+</div>
+<br>
+<button class="btn btn-success" *ngIf="sujet[0].resolu == 0 && sujet[0].creator == userID" (click)="clearModal.open()">Fermer ce sujet</button>
+</div>
