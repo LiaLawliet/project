@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { FaqComponent } from './faq/faq.component';
 import { PutfaqComponent } from './putfaq/putfaq.component';
 import { PutthemesComponent } from './putthemes/putthemes.component';
+import { PutsujetsComponent } from './putsujets/putsujets.component';
 import { AuthGuard } from './auth.guard';
 import { SujetComponent } from './sujet/sujet.component';
 import { SigninComponent } from './signin/signin.component';
@@ -21,6 +22,7 @@ const routes: Routes = [{path: 'home',component: HomeComponent},
                         {path: 'profile', component: ProfileComponent},
                         {path: 'admin/putfaq', component: PutfaqComponent},
                         {path: 'admin/putthemes', component: PutthemesComponent},
+                        {path: 'admin/putsujets', component: PutsujetsComponent},
                         {path: 'admin/updateuser', component: UpdateuserComponent},
                         {path: 'faq', component: FaqComponent},
                         {path: 'theme/:id', component: SujetComponent},

@@ -12,6 +12,7 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 export class UpdateuserComponent implements OnInit {
 
   private users = [];
+  public isAdmin = this._authService.getUserType;
   
   constructor(private _userService:UserService,private router:Router,private _authService:AuthService, private modal:NgxSmartModalService) {
     
@@ -88,6 +89,10 @@ export class UpdateuserComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.isAdmin != '1') {
+      this.router.navigate(['home'])
+    }
+
     this._userService.getAllUsers().subscribe(data => this.users = data);
   }
 

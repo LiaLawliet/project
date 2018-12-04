@@ -3,5 +3,6 @@ export interface Sujet {
     sujet_name: string,
     theme_id: number,
     resolu: number,
-    creator: number
+    creator: number,
+    hidden:number
 }

@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
   constructor(private _authService: AuthService,private _themeService: ThemeService,private modal: NgxSmartModalService,private router: Router) { }
 
   ngOnInit(){
-    this._themeService.getAllThemes().subscribe( data => this.themes = data);
+    this._themeService.getThemes().subscribe( data => this.themes = data);
   }
 
   gotoSujets(id) {

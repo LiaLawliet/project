@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ThemeService } from '../services/theme.service';
+import { SujetService } from '../services/sujet.service';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { AuthService } from '../auth.service';
 import { Router} from '@angular/router';
@@ -7,14 +8,17 @@ import { Router} from '@angular/router';
 @Component({
   selector: 'app-putthemes',
   templateUrl: './putthemes.component.html',
-  styleUrls: ['./putthemes.component.css']
+  styleUrls: ['./putthemes.component.css'],
+  providers:[ThemeService,SujetService]
 })
 export class PutthemesComponent implements OnInit {
   private themes = [];
+  public isAdmin = this._authService.getUserType;
 
   constructor(private router: Router,
               private _authService: AuthService,
               private _themeService: ThemeService,
+              private _sujetService: SujetService,
               private modal: NgxSmartModalService) { }
 
   openAddModal() {
@@ -31,6 +35,24 @@ export class PutthemesComponent implements OnInit {
     this.modal.getModal('putModal').open();
   }
 
+  openShowModal(id) {
+    let obj: Object = {
+      'id': id
+    }
+    this.modal.resetModalData('showModal')
+    this.modal.setModalData(obj, 'showModal');
+    this.modal.getModal('showModal').open();
+  }
+
+  openHideModal(id) {
+    let obj: Object = {
+      'id': id
+    }
+    this.modal.resetModalData('hideModal')
+    this.modal.setModalData(obj, 'hideModal');
+    this.modal.getModal('hideModal').open();
+  }
+
   addTheme(theme_name: string) {
     if (this._authService.loggedOut) {
       this.router.navigate(['login'])
@@ -41,7 +63,8 @@ export class PutthemesComponent implements OnInit {
         console.log(data);
         themes.push({
           id: idPlus,
-          theme_name: theme_name
+          theme_name: theme_name,
+          hidden: 0
         })
         console.log("success");
       });
@@ -69,6 +92,48 @@ export class PutthemesComponent implements OnInit {
     }
   }
 
+  showTheme(id: number) {
+    if (this._authService.loggedOut) {
+      this.router.navigate(['login'])
+    } else {
+      console.log()
+      this._themeService.revealTheme(id).subscribe(() => {
+        console.log('Thème modifié');
+        this._sujetService.revealSujet(id).subscribe(() =>{
+          for (var i = 0; i < this.themes.length; i++) {
+            if (this.themes[i].id == id) {
+              this.themes[i].hidden = 0;
+            }
+          }
+          this.modal.getModal('showModal').close();
+
+          console.log('Sujets modifiés');
+        })
+      });
+    }
+  }
+
+  hideTheme(id: number) {
+    if (this._authService.loggedOut) {
+      this.router.navigate(['login'])
+    } else {
+      console.log()
+      this._themeService.deleteTheme(id).subscribe(() => {
+        console.log('Thème modifié');
+        this._sujetService.deleteSujet(id).subscribe(() =>{
+          for (var i = 0; i < this.themes.length; i++) {
+            if (this.themes[i].id == id) {
+              this.themes[i].hidden = 1;
+            }
+          }
+          this.modal.getModal('hideModal').close();
+
+          console.log('Sujets modifiés');
+        })
+      });
+    }
+  }
+
   getId() {
     if (this.themes.length != 0) {
       return this.themes.reduce((max, p) => p.id > max ? p.id : max, this.themes[0].id) + 1;
@@ -78,6 +143,10 @@ export class PutthemesComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.isAdmin != '1') {
+      this.router.navigate(['home'])
+    }
+
     this._themeService.getAllThemes().subscribe( data => this.themes = data);
   }
 

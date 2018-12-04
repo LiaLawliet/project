@@ -25,11 +25,11 @@ export class ForumComponent implements OnInit {
               ) { }
 
   ngOnInit(){
-    this._themeService.getAllThemes().subscribe(data=>{this.themes = data,
+    this._themeService.getThemes().subscribe(data=>{this.themes = data,
       console.log(this.themes)
       });
 
-    this._sujetService.getAllSujets().subscribe( data => this.sujets = data);
+    this._sujetService.getAllNotHiddenSujets().subscribe( data => this.sujets = data);
   
     $(document).ready(function(){
       $("#myInput").on("keyup", function() {
@@ -62,15 +62,16 @@ export class ForumComponent implements OnInit {
       this.router.navigate(['login'])
     } else {
       let sujets = this.sujets
+      let auth = this._authService
       let idPlus = this.getId();
-      this._sujetService.insertSujet(theme_id,sujet_name,parseInt(this._authService.getUserID)).subscribe(function (data) {
+      this._sujetService.insertSujet(theme_id,sujet_name,parseInt(auth.getUserID)).subscribe(function (data) {
         console.log(data);
           sujets.push({
             id: idPlus,
             theme_id: theme_id,
             sujet_name:sujet_name,
             resolu : 0,
-            creator:parseInt(this._authService.getUserID)
+            creator:parseInt(auth.getUserID)
           })
         console.log("success");
       });

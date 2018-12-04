@@ -21,6 +21,7 @@ import { UpdateuserComponent } from './updateuser/updateuser.component';
 import { PutfaqComponent } from './putfaq/putfaq.component';
 import { PutthemesComponent } from './putthemes/putthemes.component';
 import { ProfileComponent } from './profile/profile.component';
+import { PutsujetsComponent } from './putsujets/putsujets.component';
 
 import { QrService } from './services/qr.service';
 import { CommentService } from './services/comment.service';
@@ -51,6 +52,7 @@ export function tokenGetter() {
     PutfaqComponent,
     PutthemesComponent,
     ProfileComponent,
+    PutsujetsComponent,
     
   ],
   imports: [

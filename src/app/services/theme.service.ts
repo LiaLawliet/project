@@ -7,6 +7,10 @@ import { Theme } from './theme';
 export class ThemeService {
   constructor(private http: HttpClient) {}
 
+  getThemes(): Observable<Theme[]> {
+    return this.http.get<Theme[]>('http://localhost:8000/api/nothiddenthemes');
+  }
+
   getAllThemes(): Observable<Theme[]> {
     return this.http.get<Theme[]>('http://localhost:8000/api/themes');
   }
@@ -17,6 +21,14 @@ export class ThemeService {
 
   updateTheme(id: number,theme_name:string): Observable<void> {
     return this.http.put<void>('http://localhost:8000/api/themes/'+id, {theme_name:theme_name});
+  }
+
+  revealTheme(id: number): Observable<void> {
+    return this.http.put<void>('http://localhost:8000/api/showthemes/'+id,{hidden:0});
+  }
+
+  deleteTheme(id: number): Observable<void> {
+    return this.http.put<void>('http://localhost:8000/api/hidethemes/'+id,{hidden:1});
   }
 
 }

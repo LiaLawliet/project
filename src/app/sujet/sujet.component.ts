@@ -34,25 +34,31 @@ export class SujetComponent implements OnInit {
               
       
   openAddModal() {
+    let obj: Object = {
+      'theme_id':parseInt(this.param)
+    }
+    this.modal.resetModalData('addModal')
+    this.modal.setModalData(obj, 'addModal');
     this.modal.getModal('addModal').open();
   }
 
   
-  addSujet(sujet_name: string) {
+  addSujet(theme_id :number,sujet_name: string) {
     if (this._authService.loggedOut) {
       this.router.navigate(['login'])
     } else {
       let sujets = this.sujets
+      let auth = this._authService
       let param = this.param
       let idPlus = this.getId();
-      this._sujetService.insertSujet(parseInt(param),sujet_name,parseInt(this._authService.getUserID)).subscribe(function (data) {
+      this._sujetService.insertSujet(theme_id,sujet_name,parseInt(auth.getUserID)).subscribe(function (data) {
         console.log(data);
           sujets.push({
             id: idPlus,
             theme_id: parseInt(param),
             sujet_name:sujet_name,
             resolu : 0,
-            creator:parseInt(this._authService.getUserID)
+            creator:parseInt(auth.getUserID)
           })
         console.log("success");
       });
@@ -72,19 +78,14 @@ export class SujetComponent implements OnInit {
 
     console.log(this.param)
 
-    this._themeService.getAllThemes().subscribe(data=>{this.themes = data
+    this._themeService.getThemes().subscribe(data=>{this.themes = data
       console.log(this.themes)
       });
 
-    this.route.paramMap.pipe(
-      switchMap((params: ParamMap) =>
-        this._sujetService.getSujets(params.get('id')))
-    ).subscribe( data => this.sujets = data);
+    this._sujetService.getSujets(parseInt(this.param)).subscribe( data => this.sujets = data);
 
-    this.route.paramMap.pipe(
-      switchMap((params: ParamMap) =>
-        this._qrService.getQrs(params.get('id')))
-    ).subscribe( data => this.qrs = data);
+    this._qrService.getQrs(parseInt(this.param)).subscribe( data => this.qrs = data);
+
     $(document).ready(function(){
       $("#myInput").on("keyup", function() {
         var value = $(this).val().toLowerCase();

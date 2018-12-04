@@ -9,7 +9,8 @@ import * as $ from 'jquery';
 @Component({
   selector: 'app-putfaq',
   templateUrl: './putfaq.component.html',
-  styleUrls: ['./putfaq.component.css']
+  styleUrls: ['./putfaq.component.css'],
+  providers:[ThemeService,QrService]
 })
 export class PutfaqComponent implements OnInit {
 
@@ -21,6 +22,7 @@ export class PutfaqComponent implements OnInit {
 
   private qrs = [];
   private themes = [];
+  public isAdmin = this._authService.getUserType;
 
   openDelModal(id) {
     this.modal.resetModalData('delModal')
@@ -116,11 +118,15 @@ export class PutfaqComponent implements OnInit {
 
   ngOnInit() {
 
+    if (this.isAdmin != '1') {
+      this.router.navigate(['home'])
+    }
+
     this._qrService.getAllQrs().subscribe(data=>{this.qrs = data
     console.log(this.qrs)
     });
 
-    this._themeService.getAllThemes().subscribe(data=>{this.themes = data
+    this._themeService.getThemes().subscribe(data=>{this.themes = data
     console.log(this.themes)
     });
     
