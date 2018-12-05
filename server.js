@@ -119,7 +119,7 @@ app.route('/api/sujets/sujet/:id').get((req, res) => {
 })
 
 app.route('/api/sujets').post((req, res) => {
-  connection.query("INSERT INTO sujets VALUES (NULL,?,?,'0','?','0')",[req.body.theme_id,req.body.sujet_name,req.body.creator], function (err, result) {
+  connection.query("INSERT INTO sujets VALUES (NULL,?,?,'0','?','?')",[req.body.theme_id,req.body.sujet_name,req.body.creator, req.body.hidden], function (err, result) {
     if (err) throw err;
     res.send(result);
   });
@@ -142,7 +142,7 @@ app.route('/api/sujets/resolu/:id').put((req, res) => {
 })
 
 app.route('/api/sujets/:id').put((req, res) => {
-  connection.query("UPDATE sujets SET theme_id = ?, sujet_name = ? WHERE sujets.id = ?",[req.body.theme_id, req.body.sujet_name,req.params.id], function (err, result) {
+  connection.query("UPDATE sujets SET theme_id = ?, sujet_name = ?,hidden = ? WHERE sujets.id = ?",[req.body.theme_id, req.body.sujet_name, req.body.hidden,req.params.id], function (err, result) {
     if (err) throw err;
     res.send(result);
   });
@@ -155,8 +155,22 @@ app.route('/api/showsujets/:id').put((req, res) => {
   });
 })
 
+app.route('/api/showsujets').put((req, res) => {
+  connection.query("UPDATE sujets SET hidden = ? WHERE sujets.theme_id = ?",[req.body.hidden,req.body.theme_id], function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+})
+
 app.route('/api/hidesujets/:id').put((req, res) => {
   connection.query("UPDATE sujets SET hidden = ? WHERE sujets.id = ?",[req.body.hidden,req.params.id], function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+})
+
+app.route('/api/hidesujets').put((req, res) => {
+  connection.query("UPDATE sujets SET hidden = ? WHERE sujets.theme_id = ?",[req.body.hidden,req.body.theme_id], function (err, result) {
     if (err) throw err;
     res.send(result);
   });

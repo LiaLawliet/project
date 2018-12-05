@@ -63,8 +63,10 @@ export class PutsujetsComponent implements OnInit {
     } else {
       let auth = this._authService
       let sujets = this.sujets
+      let themes = this.themes
+      let theme = themes.find(item => item.id == theme_id)
       let idPlus = this.getId();
-      this._sujetService.insertSujet(theme_id,sujet_name,parseInt(auth.getUserID)).subscribe(function (data) {
+      this._sujetService.insertSujet(theme_id,sujet_name, theme.hidden,parseInt(auth.getUserID)).subscribe(function (data) {
         console.log(data);
           sujets.push({
             id: idPlus,
@@ -72,7 +74,7 @@ export class PutsujetsComponent implements OnInit {
             sujet_name:sujet_name,
             resolu : 0,
             creator:parseInt(auth.getUserID),
-            hidden : 0
+            hidden : theme.hidden
           })
         console.log("success");
       });
@@ -85,12 +87,15 @@ export class PutsujetsComponent implements OnInit {
       this.router.navigate(['login'])
     } else {
       console.log()
-      this._sujetService.updateSujet(id, theme_id, sujet_name).subscribe(() => {
+      let themes = this.themes
+      let theme = themes.find(item => item.id == theme_id)
+      this._sujetService.updateSujet(id, theme_id, sujet_name,theme.hidden).subscribe(() => {
        
         for (var i = 0; i < this.sujets.length; i++) {
           if (this.sujets[i].id == id) {
             this.sujets[i].theme_id = theme_id;
             this.sujets[i].sujet_name = sujet_name;
+            this.sujets[i].hidden = theme.hidden;
           }
         }
         this.modal.getModal('putModal').close();

@@ -99,7 +99,7 @@ export class PutthemesComponent implements OnInit {
       console.log()
       this._themeService.revealTheme(id).subscribe(() => {
         console.log('Thème modifié');
-        this._sujetService.revealSujet(id).subscribe(() =>{
+        this._sujetService.revealSujetFromTheme(id).subscribe(() =>{
           for (var i = 0; i < this.themes.length; i++) {
             if (this.themes[i].id == id) {
               this.themes[i].hidden = 0;
@@ -120,7 +120,7 @@ export class PutthemesComponent implements OnInit {
       console.log()
       this._themeService.deleteTheme(id).subscribe(() => {
         console.log('Thème modifié');
-        this._sujetService.deleteSujet(id).subscribe(() =>{
+        this._sujetService.deleteSujetFromTheme(id).subscribe(() =>{
           for (var i = 0; i < this.themes.length; i++) {
             if (this.themes[i].id == id) {
               this.themes[i].hidden = 1;
