@@ -1,5 +1,26 @@
 const _ = require('lodash');
 const express = require('express');
+const router = express.Router();
+const multer = require('multer');
+let crypto = require('crypto')
+var path = require('path');
+const mime = require('mime');
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/uploads/')
+  },
+  filename: function (req, file, cb) {
+    crypto.pseudoRandomBytes(16, function (err, raw) {
+      if (err) return cb(err)
+
+      cb(null, raw.toString('hex') + Date.now() + '.' + mime.extension(file.mimetype))
+    })
+  }
+});
+
+const upload = multer({ storage: storage });
+
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const expressJwt = require('express-jwt');
@@ -11,9 +32,11 @@ var mysql = require('mysql');
 app.use(cors());
 app.use(bodyParser.json());
 
+
 app.use(
   expressJwt({ secret: 'todo-app-super-shared-secret' }).unless({
     path: [
+      /^\/public\/.*/,
       '/api/themes',
       '/api/nothiddenthemes',
       '/api/nothiddensujets',
@@ -30,6 +53,8 @@ app.use(
   })
 );
 
+app.use('/public',express.static(path.join(__dirname,'./public')))
+
 var connection = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -45,6 +70,15 @@ connection.connect((err) => {
 app.listen(8000, () => {
   console.log('Server OK!');
 });
+
+app.route('/api/upload/:id').post( upload.any(), function(req,res,next) {
+  console.log(JSON.stringify(req.files[0].filename))
+  connection.query("UPDATE users SET image = ? WHERE users.user_id = ?",[req.files[0].filename,req.params.id], function (err, result) {
+    if (err) throw err;
+    res.send({filename:req.files[0].filename});
+  });
+})
+
 
 
 /***** THEMES ******/
@@ -232,7 +266,7 @@ app.route('/api/auth').post((req, res) => {
     if (body.password != user.password) return res.sendStatus(401);
 
     let token = jwt.sign({ userID: user.user_id }, 'todo-app-super-shared-secret', { expiresIn: '2h' });
-    res.send({password:user.password, email: user.email, isAdmin: user.isAdmin ,username: user.username,user_id:user.user_id,token });
+    res.send({password:user.password, email: user.email, isAdmin: user.isAdmin ,username: user.username,user_id:user.user_id,image:user.image,token });
   });
 
 });
@@ -263,14 +297,14 @@ app.route('/api/comments/:id').post((req, res) => {
 app.route('/api/comments/:id').put((req, res) => {
   console.log(JSON.stringify(req.body))
   console.log("UPDATE comments SET message = '"+req.body.message+"' WHERE comments.id = "+req.params.id)
-  connection.query("UPDATE comments SET message = '?' WHERE comments.id = ?",[req.body.message, req.params.id], function (err, result) {
+  connection.query("UPDATE comments SET message = ? WHERE comments.id = ?",[req.body.message, req.params.id], function (err, result) {
     if (err) throw err;
     res.send(result);
   });
 });
 
 app.route('/api/comments/:id').delete((req, res) => {
-  connection.query("DELETE FROM comments WHERE id = '?'",[req.params.id], function (err, result) {
+  connection.query("DELETE FROM comments WHERE id = ?",[req.params.id], function (err, result) {
     if (err) throw err;
     res.send(result);
   });
@@ -294,7 +328,7 @@ app.route('/api/users').get((req, res) => {
 })
 
 app.route('/api/users/:id').delete((req, res) => {
-  connection.query("DELETE FROM users WHERE user_id = '?'",[req.params.id], function (err, result) {
+  connection.query("DELETE FROM users WHERE user_id = ?",[req.params.id], function (err, result) {
     if (err) throw err;
     res.send(result);
   });

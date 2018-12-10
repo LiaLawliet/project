@@ -21,6 +21,7 @@ export class SujetComponent implements OnInit {
   public param = this.route.snapshot.paramMap.get('id');
   public sujets = [];
   private themes = [];
+  private allThemes = [];
   public qrs = [];
 
   constructor(private _sujetService: SujetService,
@@ -49,9 +50,11 @@ export class SujetComponent implements OnInit {
     } else {
       let sujets = this.sujets
       let auth = this._authService
+      let themes = this.themes
+      let theme = themes.find(item => item.id == theme_id)
       let param = this.param
       let idPlus = this.getId();
-      this._sujetService.insertSujet(theme_id,sujet_name,parseInt(auth.getUserID)).subscribe(function (data) {
+      this._sujetService.insertSujet(theme_id,sujet_name,theme.hidden,parseInt(auth.getUserID)).subscribe(function (data) {
         console.log(data);
           sujets.push({
             id: idPlus,
@@ -76,11 +79,24 @@ export class SujetComponent implements OnInit {
   
   ngOnInit(){
 
+    
     console.log(this.param)
-
+    
     this._themeService.getThemes().subscribe(data=>{this.themes = data
       console.log(this.themes)
-      });
+    });
+
+    this._themeService.getAllThemes().subscribe(data=>{this.allThemes = data
+      console.log(this.allThemes)
+
+      let allThemes = this.allThemes
+      let theme = allThemes.find(item => item.id == this.param)
+
+      if (theme.hidden == 1) {
+        this.router.navigate(['home'])
+      }
+    });
+
 
     this._sujetService.getSujets(parseInt(this.param)).subscribe( data => this.sujets = data);
 

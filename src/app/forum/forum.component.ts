@@ -62,9 +62,11 @@ export class ForumComponent implements OnInit {
       this.router.navigate(['login'])
     } else {
       let sujets = this.sujets
+      let themes = this.themes
+      let theme = themes.find(item => item.id == theme_id)
       let auth = this._authService
       let idPlus = this.getId();
-      this._sujetService.insertSujet(theme_id,sujet_name,parseInt(auth.getUserID)).subscribe(function (data) {
+      this._sujetService.insertSujet(theme_id,sujet_name,theme.hidden,parseInt(auth.getUserID)).subscribe(function (data) {
         console.log(data);
           sujets.push({
             id: idPlus,

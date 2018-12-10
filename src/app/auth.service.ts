@@ -8,7 +8,7 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   login(email: string, password: string): Observable<boolean> {
-    return this.http.post<{password:string, email: string,isAdmin: string,user_id:string , username:string,token: string}>('http://localhost:8000/api/auth', {email: email, password: password})
+    return this.http.post<{password:string, email: string,isAdmin: string,user_id:string , username:string,image:string,token: string}>('http://localhost:8000/api/auth', {email: email, password: password})
       .pipe(
         map(result => {
           console.log(result.user_id)
@@ -18,6 +18,7 @@ export class AuthService {
           localStorage.setItem('user_id', result.user_id );
           localStorage.setItem('isAdmin', result.isAdmin );
           localStorage.setItem('password', result.password );
+          localStorage.setItem('image', result.image );
           return true;
         })
       );
@@ -30,9 +31,14 @@ export class AuthService {
     localStorage.removeItem('isAdmin');
     localStorage.removeItem('email');
     localStorage.removeItem('password');
+    localStorage.removeItem('image');
   }
   public get getUser(): string {
     return localStorage.getItem('username') || '' ;
+  }
+
+  public get getUserImage(): string {
+    return localStorage.getItem('image') || '' ;
   }
 
   public get getUserType(): string {

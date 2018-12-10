@@ -33,6 +33,7 @@ export class InputComponent implements OnInit {
   public userID = this._authService.getUserID
   public param = this.route.snapshot.paramMap.get('id');
   public sujet : Array<Sujet> = [];
+  private allSujets = [];
   public comments = [];
   public sender = parseInt(this._authService.getUserID);
   public isAdmin = this._authService.getUserType;
@@ -155,6 +156,17 @@ export class InputComponent implements OnInit {
   }
 
   ngOnInit() {
+    this._sujetService.getAllSujets().subscribe(data=>{this.allSujets = data
+      console.log(this.allSujets)
+
+      let allsujets = this.allSujets
+      let sujet = allsujets.find(item => item.id == this.param)
+
+      if (sujet.hidden == 1) {
+        this.router.navigate(['home'])
+      }
+    });
+
     this._sujetService.getSujet(parseInt(this.param)).subscribe(data => (this.sujet = data,console.log(this.sujet)));
 
     this._commentService.getComments(parseInt(this.param)).subscribe(data => this.comments = data);

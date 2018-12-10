@@ -58,3 +58,16 @@
   <button style="margin:10px 10px;" class="btn btn-secondary" (click)="passwordModal.close();passwordModal.getData().password='';passwordModal.getData().newPassword='';passwordModal.getData().checkPassword=''"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
   <button *ngIf="passwordModal.hasData()" class="btn btn-primary" (click)="putPassword(passwordModal.getData().password,passwordModal.getData().newPassword,passwordModal.getData().checkPassword);passwordModal.getData().password='';passwordModal.getData().newPassword='';passwordModal.getData().checkPassword=''"><i class="fas fa-check"></i> Modifier</button>
 </ngx-smart-modal>
+
+<div class="row">
+  <div class="col-md-10">
+    <input type="file" (change)="onFileSelected($event)">
+    <button class="btn btn-primary" (click)="onUpload()">
+      Upload
+    </button>
+  </div>
+</div>
+
+
+
+<img src="http://localhost:8000/public/uploads/{{auth.getUserImage}}" alt="Photo de profil" title="Photo de profil">

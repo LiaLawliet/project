@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Router } from '@angular/router';
+import { HttpClient,HttpEventType } from '@angular/common/http';
 import { ProfileService } from '../services/profile.service';
+import { ResourceLoader } from '@angular/compiler';
 
 @Component({
   selector: 'app-profile',
@@ -13,13 +15,37 @@ export class ProfileComponent implements OnInit {
 
   public error1 : string;
   public error2 : string;
+  private userId = parseInt(this.auth.getUserID) 
   
-  constructor(private auth:AuthService, private modal:NgxSmartModalService,private router: Router, private _profileService:ProfileService) { }
-  
-  ngOnInit() {
+  constructor(private auth:AuthService,private http:HttpClient, private modal:NgxSmartModalService,private router: Router, private _profileService:ProfileService) { }
+  selectedFile: File = null;
+
+  onFileSelected(event){
+    this.selectedFile = <File>event.target.files[0];
+  }
+
+  onUpload(){
+    const fd = new FormData();
+    fd.append('image',this.selectedFile,this.selectedFile.name)
+    this.http.post<File>('http://localhost:8000/api/upload/'+this.userId, fd, {
+      reportProgress:true,
+      observe:'events'
+    }).subscribe(event => {
+      if (event.type === HttpEventType.UploadProgress) {
+        console.log('Upload progress: '+ Math.round(event.loaded/event.total * 100)+'%')
+      }else if(event.type === HttpEventType.Response){
+        console.log(event.body)
+        //localStorage.setItem('image', event.body.filename);
+      }
+      
+    })
+  }
+
+  ngOnInit() {    
   }
 
   openUsernameModal(username) {
+    console.log(this.auth.getUserImage);
     let obj: Object = {
       'username': username
     }
