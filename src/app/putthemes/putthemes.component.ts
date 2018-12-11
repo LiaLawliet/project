@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ThemeService } from '../services/theme.service';
 import { SujetService } from '../services/sujet.service';
 import { NgxSmartModalService } from 'ngx-smart-modal';
+import { HttpClient,HttpEventType } from '@angular/common/http';
 import { AuthService } from '../auth.service';
 import { Router} from '@angular/router';
 
@@ -14,12 +15,46 @@ import { Router} from '@angular/router';
 export class PutthemesComponent implements OnInit {
   private themes = [];
   public isAdmin = this._authService.getUserType;
+  private userId = parseInt(this._authService.getUserID) 
 
   constructor(private router: Router,
               private _authService: AuthService,
               private _themeService: ThemeService,
               private _sujetService: SujetService,
-              private modal: NgxSmartModalService) { }
+              private modal: NgxSmartModalService,
+              private http: HttpClient) { }
+
+  selectedFile: File = null;
+
+  onFileSelected(event){
+    this.selectedFile = <File>event.target.files[0];
+  }
+
+  openImgModal(id) {
+    let obj: Object = {
+      'id': id
+    }
+    this.modal.resetModalData('imgModal')
+    this.modal.setModalData(obj, 'imgModal');
+    this.modal.getModal('imgModal').open();
+  }
+
+  onUpload(id){
+    const fd = new FormData();
+    fd.append('image',this.selectedFile,this.selectedFile.name)
+    this.http.post<File>('http://localhost:8000/api/uploadtheme/'+id, fd, {
+      reportProgress:true,
+      observe:'events'
+    }).subscribe(event => {
+      if (event.type === HttpEventType.UploadProgress) {
+        console.log('Upload progress: '+ Math.round(event.loaded/event.total * 100)+'%')
+      }else if(event.type === HttpEventType.Response){
+        console.log(event.body);
+
+      }
+      this.modal.getModal('imgModal').close();
+    })
+  }
 
   openAddModal() {
     this.modal.getModal('addModal').open();

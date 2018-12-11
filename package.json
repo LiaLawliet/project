@@ -39,6 +39,7 @@
     "ngx-smart-modal": "^7.1.0",
     "npm": "^6.4.1",
     "rxjs": "~6.3.3",
+    "safe-pipe": "^0.3.0",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {

@@ -71,6 +71,16 @@ app.listen(8000, () => {
   console.log('Server OK!');
 });
 
+/***** UPLOAD ******/
+
+app.route('/api/uploadtheme/:id').post( upload.any(), function(req,res,next) {
+  console.log(JSON.stringify(req.files[0].filename))
+  connection.query("UPDATE themes SET image = ? WHERE themes.id = ?",[req.files[0].filename,req.params.id], function (err, result) {
+    if (err) throw err;
+    res.send({filename:req.files[0].filename});
+  });
+})
+
 app.route('/api/upload/:id').post( upload.any(), function(req,res,next) {
   console.log(JSON.stringify(req.files[0].filename))
   connection.query("UPDATE users SET image = ? WHERE users.user_id = ?",[req.files[0].filename,req.params.id], function (err, result) {
@@ -314,7 +324,7 @@ app.route('/api/comments/:id').delete((req, res) => {
 /******* USERS ************/
 
 app.route('/api/users').post((req, res) => {
-  connection.query("INSERT INTO users VALUES (NULL,'?','?','?', 0)",[req.body.email,req.body.password,req.body.username], function (err, result) {
+  connection.query("INSERT INTO users VALUES (NULL,?,?,?,0,'default.jpg')",[req.body.email,req.body.password,req.body.username], function (err, result) {
     if (err) throw err;
     res.send(result);
   });

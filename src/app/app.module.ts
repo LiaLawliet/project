@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { AccordionModule } from "ngx-accordion";
 import { JwtModule } from '@auth0/angular-jwt';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
+import { SafePipeModule } from 'safe-pipe';
 
 import { AppComponent } from './app.component';
 import { InputComponent } from './input/input.component';
@@ -62,6 +63,7 @@ export function tokenGetter() {
     HttpModule,
     FormsModule,
     AccordionModule,
+    SafePipeModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,

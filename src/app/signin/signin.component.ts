@@ -30,5 +30,8 @@ export class SigninComponent implements OnInit {
       this.error = 'Mots de passe identiques ou champs vides'
     }
   }
+  login(){
+    this.router.navigate(['login']);
+  }
 
 }

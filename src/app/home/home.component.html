@@ -1,4 +1,34 @@
-<div class="com" *ngFor="let theme of themes" [attr.id]="theme.id">
-  <a (click)="gotoSujets(theme.id)">{{theme.theme_name}}</a>
-  <hr>
+<div class="app-content container center-layout mt-2">
+    <div class="content-wrapper">
+      <div class="content-header row" style="margin-bottom: 10px;">
+        <div class="content-header-left col-md-12 col-xs-12">
+          <h2 class="content-header-title mb-0">Acceuil</h2>
+        </div>
+        <div class="content-header-lead col-xs-12 mt-2">
+          <p class="lead">An inspirational collection of 30 subtle hover effects.</p>
+        </div>
+      </div>
+      <div class="content-body"><!-- Description -->
+<section class="card">
+    <div class="card-body collapse in">
+        <div class="card-block my-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+            <div class="row">
+                <div class="grid-hover">
+                    <div *ngFor="let theme of themes" [attr.id]="theme.id" class="col-md-6 col-xs-12">
+                        <figure class="effect-sadie" [ngStyle]="{'background-image': 'url(http://localhost:8000/public/uploads/'+ theme.image +')'}">
+                            <figcaption>
+                                <h2><span>{{theme.theme_name}}</span></h2>
+                                <p>{{theme.description}}</p>
+                                <a (click)="gotoSujets(theme.id)"></a>
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ Image grid -->
+</section>
+</div>
+</div>
 </div>

@@ -1,20 +1,56 @@
-<h4 *ngIf="error" style="color:red">{{error}}</h4>
-  <div class="form-group col-3">
-    <label for="email">Adresse Email</label>
-    <input type="text" name="email" #email class="form-control"/>
+<div class="app-content container center-layout mt-2">
+  <div class="content-wrapper">
+    <div class="content-header row">
+    </div>
+    <div class="content-body">
+      <section class="flexbox-container">
+        <div class="col-md-4 offset-md-4 col-xs-10 offset-xs-1 box-shadow-3 p-0">
+          <div class="card border-grey border-lighten-3 px-1 py-1 m-0">
+            <div class="card-header no-border">
+              <div class="card-title text-xs-center">
+                <img src="http://localhost:8000/public/uploads/logo_team_will.png" style="width: 8vw;" alt="branding logo">
+              </div>
+              <h6 class="card-subtitle line-on-side text-muted text-xs-center font-small-3 pt-2"><span>Entrez vos informations</span></h6>
+            </div>
+            <div class="card-body collapse in">
+              <div class="card-block" style="padding-top:0">
+                <h4 *ngIf="error" style="color:red">{{error}}</h4>
+                <form class="form-horizontal" action="index.html" novalidate>
+                  <fieldset class="form-group position-relative has-icon-left">
+                    <input type="text" name="email" placeholder="Adresse email" #email class="form-control"/>
+                    <div class="form-control-position">
+                        <i class="icon-mail6"></i>
+                    </div>
+                  </fieldset>
+                  <fieldset class="form-group position-relative has-icon-left">
+                    <input type="text" name="username" placeholder="Nom d'utilisateur" #username class="form-control"/>
+                    <div class="form-control-position">
+                        <i class="icon-head"></i>
+                    </div>
+                  </fieldset>
+                  <fieldset class="form-group position-relative has-icon-left">
+                    <input type="password" name="password" placeholder="Mot de passe" #password class="form-control"/>
+                    <div class="form-control-position">
+                      <i class="icon-key3"></i>
+                    </div>
+                  </fieldset>
+                  <fieldset class="form-group position-relative has-icon-left">
+                    <input type="password" name="checkpassword" placeholder="Vérification mot de passe" #checkpassword class="form-control"/>
+                    <div class="form-control-position">
+                      <i class="icon-key3"></i>
+                    </div>
+                  </fieldset>
+                  <button (click)="addUser(email.value,username.value,password.value,checkpassword.value)" class="btn btn-outline-primary btn-block"><i class="icon-check"></i> Register</button>
+                </form>
+              </div>
+              <p class="card-subtitle line-on-side text-muted text-xs-center font-small-3 mx-2 my-1"><span>Already have an account ?</span></p>
+              <div class="card-block">
+                <button (click)="login()" class="btn btn-outline-primary btn-block"><i class="icon-head"></i> Login</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
-  <div class="form-group col-3">
-    <label for="username">Nom d'utilisateur</label>
-    <input type="text" name="username" #username class="form-control"/>
-  </div>
-  <div class="form-group col-3">
-    <label for="password">Password</label>
-    <input type="password" name="password" #password class="form-control"/>
-  </div>
-  <div class="form-group col-3">
-    <label for="checkpassword">Check Password</label>
-    <input type="password" name="checkpassword" #checkpassword class="form-control"/>
-  </div>
-  <div class="form-group col-3">
-    <button class="btn btn-primary" (click)="addUser(email.value,username.value,password.value,checkpassword.value)" type="submit">Valider</button>
-  </div>
+</div>
