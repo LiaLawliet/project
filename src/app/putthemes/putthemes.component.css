@@ -1,0 +1,7 @@
+.modifiable{
+    cursor: pointer;
+}
+
+.card:hover{
+    transition: 0.45s;
+}

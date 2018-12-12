@@ -1,47 +1,95 @@
-<div class="row">
-  <div class="col-md-3 offset-md-9" style="text-align:center">
-    <button class="btn btn-primary text-right" (click)="openAddModal()"><i class="fas fa-plus"></i> Ajouter un thème</button>
-  </div>
-</div>
-
-<div *ngFor="let theme of themes" id="static-{{theme.id}}" class="elSujet">
-  <div class="row">
-    <div class="col-md-10" [ngStyle]="{'background-color':theme.hidden == 0 ? '#99ff99' : '#ff8080' }">
-      <p>
-        {{theme.theme_name}}
-      </p>
+  <div class="container">
+    <div class="content-header row">
+      <div class="breadcrumb-wrapper col-xs-12">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Acceuil</a>
+          </li>
+          <li class="breadcrumb-item"><a href="#">Admin</a>
+          </li>
+          <li class="breadcrumb-item active">Thèmes
+          </li>
+        </ol>
+      </div>
+      <div class="content-header-left col-md-6 col-xs-12">
+        <h3 class="content-header-title mb-0">Thèmes</h3>
+      </div>
+      <div class="content-header-right col-md-6 col-xs-12">
+        <div class="float-md-right">
+            <button class="btn btn-primary text-right" (click)="openAddModal()"><i class="fas fa-plus"></i> Ajouter un
+              thème</button>
+        </div>
+      </div>
+      <div class="content-header-lead col-xs-12 mt-1">
+        <p class="lead">Buttons include support for a handful of contextual variations, sizes, states, and more. Group
+          a series of buttons together on a single line with the button group.</p>
+      </div>
     </div>
-    <div class="col-md-2">
-        <button title="Modifier le nom de thème" class="btn btn-primary btn-sm" (click)="openPutModal(theme.id,theme.theme_name)"><i class="fas fa-edit"></i></button>
-        <button *ngIf="theme.hidden == 0" title="Cacher le thème au utilisateurs" class="btn btn-warning btn-sm" (click)="openHideModal(theme.id)"><i class="far fa-eye-slash"></i></button>
-        <button *ngIf="theme.hidden == 1" title="Autoriser les utilisateurs à voir ce thème" class="btn btn-success btn-sm" (click)="openShowModal(theme.id)"><i class="far fa-eye"></i></button>
+    <div class="row">
+      <div class="col-md-3 offset-md-9" style="text-align:center">
+        
+      </div>
     </div>
   </div>
-  <hr>
-</div>
-
-<ngx-smart-modal [closable]="false" #putModal identifier="putModal" >
-  <h4>Modifier le nom du thème</h4>
-  <input #input *ngIf="putModal.hasData()" (keyup)="putModal.getData().theme_name=input.value" type="text" class="form-control" value="{{putModal.getData().theme_name}}">
-  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="putModal.close();putModal.getData().theme_name=''"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
-  <button class="btn btn-primary" (click)="putTheme(putModal.getData().id,putModal.getData().theme_name);putModal.getData().theme_name='';"><i class="fas fa-check"></i> Modifier</button>
+  <div class="container">
+    <div class="row match-height">
+      <div class="col-xl-4 col-md-6 col-sm-12" *ngFor="let theme of themes">
+        <div class="card" [ngStyle]="{'box-shadow': getColor(theme.hidden)}">
+          <div class="card-body">
+              <img class="card-img-top img-fluid modifiable" (click)="openImgModal(theme.id)" style="width:100%;height: 200px;"
+                  alt="Card image" src="http://localhost:8000/public/uploads/{{theme.image}}">
+            <div class="card-block">
+              <h4 class="card-title modifiable" (click)="openPutModal(theme.id,theme.theme_name)">{{theme.theme_name}}</h4>
+              <p class="card-text modifiable">{{theme.description}}</p>
+            </div>
+            <div class="card-block">
+              <button *ngIf="theme.hidden == 0" title="Cacher le thème au utilisateurs" class="btn btn-warning btn-sm"
+                (click)="openHideModal(theme.id)"><i class="far fa-eye-slash"></i> Masquer</button>
+              <button *ngIf="theme.hidden == 1" title="Autoriser les utilisateurs à voir ce thème" class="btn btn-success btn-sm"
+                (click)="openShowModal(theme.id)"><i class="far fa-eye"></i> Montrer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<ngx-smart-modal customClass="nsm-centered" [closable]="false" #imgModal identifier="imgModal">
+  <h4 *ngIf="imgModal.hasData()">Modifier l'image ce thème ?</h4>
+  <input type="file" (change)="onFileSelected($event)">
+  <br>
+  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="imgModal.close()"><i class="fas fa-long-arrow-alt-left"></i>
+    Annuler</button>
+  <button *ngIf="imgModal.hasData()" class="btn btn-default" (click)="onUpload(imgModal.getData().id)"><i class="fas fa-check"></i>
+    Modifier</button>
 </ngx-smart-modal>
 
-<ngx-smart-modal [closable]="false" #showModal identifier="showModal" >
+<ngx-smart-modal [closable]="false" #putModal identifier="putModal">
+  <h4>Modifier le nom du thème</h4>
+  <input #input *ngIf="putModal.hasData()" (keyup)="putModal.getData().theme_name=input.value" type="text" class="form-control"
+    value="{{putModal.getData().theme_name}}">
+  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="putModal.close();putModal.getData().theme_name=''"><i
+      class="fas fa-long-arrow-alt-left"></i> Annuler</button>
+  <button class="btn btn-primary" (click)="putTheme(putModal.getData().id,putModal.getData().theme_name);putModal.getData().theme_name='';"><i
+      class="fas fa-check"></i> Modifier</button>
+</ngx-smart-modal>
+
+<ngx-smart-modal [closable]="false" #showModal identifier="showModal">
   <h4>Autoriser les utilisateurs à voir ce thème ?</h4>
-  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="showModal.close()"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
+  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="showModal.close()"><i class="fas fa-long-arrow-alt-left"></i>
+    Annuler</button>
   <button class="btn btn-success" (click)="showTheme(showModal.getData().id)"><i class="fas fa-check"></i> Valider</button>
 </ngx-smart-modal>
 
-<ngx-smart-modal [closable]="false" #hideModal identifier="hideModal" >
+<ngx-smart-modal [closable]="false" #hideModal identifier="hideModal">
   <h4>Cacher ce thème aux utilisateurs ?</h4>
-  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="hideModal.close()"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
+  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="hideModal.close()"><i class="fas fa-long-arrow-alt-left"></i>
+    Annuler</button>
   <button class="btn btn-warning" (click)="hideTheme(hideModal.getData().id)"><i class="fas fa-check"></i> Valider</button>
 </ngx-smart-modal>
 
 <ngx-smart-modal [closable]="false" #addModal identifier="addModal">
   <h4>Ajouter un thème</h4>
-  <input #inputQ type="text" class="form-control"  placeholder="Nom du thème souhaité">
-  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="addModal.close()"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
+  <input #inputQ type="text" class="form-control" placeholder="Nom du thème souhaité">
+  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="addModal.close()"><i class="fas fa-long-arrow-alt-left"></i>
+    Annuler</button>
   <button class="btn btn-primary" (click)="addTheme(inputQ.value);"><i class="fas fa-check"></i> Ajouter</button>
 </ngx-smart-modal>

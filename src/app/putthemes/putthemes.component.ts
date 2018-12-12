@@ -13,6 +13,7 @@ import { Router} from '@angular/router';
   providers:[ThemeService,SujetService]
 })
 export class PutthemesComponent implements OnInit {
+  private hover = false;
   private themes = [];
   public isAdmin = this._authService.getUserType;
   private userId = parseInt(this._authService.getUserID) 
@@ -25,6 +26,14 @@ export class PutthemesComponent implements OnInit {
               private http: HttpClient) { }
 
   selectedFile: File = null;
+
+  getColor(hidden){
+    if (hidden == 0) {
+      return '0px 0px 20px 0px #009688';
+    }else{
+      return '0px 0px 20px 0px #ff8080';
+    }
+  }
 
   onFileSelected(event){
     this.selectedFile = <File>event.target.files[0];
@@ -50,7 +59,11 @@ export class PutthemesComponent implements OnInit {
         console.log('Upload progress: '+ Math.round(event.loaded/event.total * 100)+'%')
       }else if(event.type === HttpEventType.Response){
         console.log(event.body);
-
+        for (var i = 0; i < this.themes.length; i++) {
+          if (this.themes[i].id == id) {
+            this.themes[i].image = event.body['filename'];
+          }
+        }
       }
       this.modal.getModal('imgModal').close();
     })

@@ -35,7 +35,7 @@ export class ProfileComponent implements OnInit {
         console.log('Upload progress: '+ Math.round(event.loaded/event.total * 100)+'%')
       }else if(event.type === HttpEventType.Response){
         console.log(event.body)
-        //localStorage.setItem('image', event.body.filename);
+        localStorage.setItem('image', event.body['filename']);
       }
       
     })
