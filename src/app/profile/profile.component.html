@@ -65,6 +65,17 @@
   </div>
 </div>
 
+<ngx-smart-modal customClass="nsm-centered" [closable]="false" #imgModal identifier="imgModal">
+  <h4 *ngIf="imgModal.hasData()">Modifier l'image ce thème ?</h4>
+  <img class="rounded-circle width-300 height-300" [src]="url" height="200"> <br/>
+  <input type="file" (change)="onFileSelected($event)">
+  <br>
+  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="imgModal.close()"><i class="fas fa-long-arrow-alt-left"></i>
+    Annuler</button>
+  <button *ngIf="imgModal.hasData()" class="btn btn-default" (click)="onUpload()"><i class="fas fa-check"></i>
+    Modifier</button>
+</ngx-smart-modal>
+
 
 
 <img src="http://localhost:8000/public/uploads/{{auth.getUserImage}}" alt="Photo de profil" title="Photo de profil" class="rounded-circle width-300 height-300">

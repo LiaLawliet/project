@@ -15,12 +15,12 @@ export class ThemeService {
     return this.http.get<Theme[]>('http://localhost:8000/api/themes');
   }
 
-  insertTheme(theme_name:string): Observable<Theme> {
-    return this.http.post<Theme>('http://localhost:8000/api/themes', {theme_name:theme_name});
+  insertTheme(theme_name:string,description:string): Observable<Theme> {
+    return this.http.post<Theme>('http://localhost:8000/api/themes', {theme_name:theme_name, description:description});
   }
 
-  updateTheme(id: number,theme_name:string): Observable<void> {
-    return this.http.put<void>('http://localhost:8000/api/themes/'+id, {theme_name:theme_name});
+  updateTheme(id: number,theme_name:string,description:string): Observable<void> {
+    return this.http.put<void>('http://localhost:8000/api/themes/'+id, {theme_name:theme_name,description:description});
   }
 
   revealTheme(id: number): Observable<void> {

@@ -1,7 +1,7 @@
 .modifiable{
     cursor: pointer;
 }
-
-.card:hover{
-    transition: 0.45s;
+.boucle{
+    height: 450px;
+    margin-top: 30px;
 }

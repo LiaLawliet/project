@@ -1,4 +1,4 @@
 ::ng-deep body  {
-    background: url(http://localhost:8000/public/uploads/bg-login.jpg) no-repeat center center fixed;
+    background: url(http://localhost:8000/public/uploads/bg-login.jpg) no-repeat center fixed;
     background-size: cover;
 }

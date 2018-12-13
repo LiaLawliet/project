@@ -418,7 +418,31 @@ $(document).ready(function(){
             message: $('.growl-notification-example'),
             fadeIn: 700,
             fadeOut: 700,
-            timeout: 50000,
+            timeout: 5000,
+            showOverlay: false,
+            centerY: false,
+            css: {
+                width: '250px',
+                top: '20px',
+                left: '',
+                right: '20px',
+                border: 'none',
+                padding: '15px 5px',
+                backgroundColor: '#333',
+                '-webkit-border-radius': '10px',
+                '-moz-border-radius': '10px',
+                opacity: 0.9,
+                color: '#fff'
+            }
+        });
+    });
+
+    $('.growl-add').on('click', function() {
+        $.blockUI({
+            message: $('.growl-notification-add'),
+            fadeIn: 700,
+            fadeOut: 700,
+            timeout: 3000,
             showOverlay: false,
             centerY: false,
             css: {

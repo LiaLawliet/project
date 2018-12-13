@@ -1,25 +1,53 @@
-<table class="table table-hover">
-  <thead class="thead-dark">
-    <tr>
-      <th>Nom d'utilisateur</th>
-      <th>Adresse email</th>
-      <th>Statut</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of users">
-      <td>{{user.username}}</td>
-      <td>{{user.email}}</td>
-      <td><span *ngIf="user.isAdmin == 1"><b>Administrateur</b></span>
-          <span *ngIf="user.isAdmin == 0">Standard</span></td>
-      <td>
-          <button *ngIf="user.user_id != loggedUser" class="btn btn-danger btn-sm"  (click)="openDelModal(user.user_id,user.username)"><i class="fas fa-times"></i></button>
-          <button *ngIf="user.user_id != loggedUser" class="btn btn-primary btn-sm" (click)="openPutModal(user.user_id,user.username,user.isAdmin)"><i class="fas fa-edit"></i></button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="container">
+  <div class="content-header row">
+    <div class="breadcrumb-wrapper col-xs-12">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a style="color:rgb(49, 51, 158)" (click)="gotoHome()">Acceuil</a>
+        </li>
+        <li class="breadcrumb-item"><a style="color:rgb(49, 51, 158)" (click)="gotoAdmin()">Admin</a>
+        </li>
+        <li class="breadcrumb-item active">Utilisateurs
+        </li>
+      </ol>
+    </div>
+    <div class="content-header-left col-xs-12">
+      <h3 class="content-header-title mb-0">Utilisateurs</h3>
+    </div>
+    <div class="content-header-lead col-xs-12 mt-1">
+      <p class="lead">Buttons include support for a handful of contextual variations, sizes, states, and more. Group
+        a series of buttons together on a single line with the button group.</p>
+    </div>
+    <div class="col-md-4 offset-md-8 col-xs-12">
+      <fieldset class="form-group position-relative has-icon-left">
+          <input type="text" class="form-control round" id="myInput" placeholder="Rechercher">
+          <div class="form-control-position">
+              <i class="fas fa-search"></i>
+          </div>
+      </fieldset>
+    </div>
+  </div>
+  <div class="row">
+      <div *ngFor="let user of users"  class="col-xl-3 col-md-6 col-xs-12 elSujet">
+          <div class="card box-shadow-2" style="box-shadow:0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)">
+              <div class="text-xs-center">
+                  <div class="card-block">
+                      <img src="http://localhost:8000/public/uploads/{{user.image}}" class="rounded-circle width-150 height-150" alt="Card image">
+                  </div>
+                  <div class="card-block">
+                      <h4 class="card-title">{{user.username}}</h4>
+                      <h6 class="card-subtitle text-muted">{{user.email}}</h6>
+                  </div>
+                  <h5 *ngIf="user.isAdmin == 1" class="card-title"><b>Administrateur</b></h5>
+                  <h6 *ngIf="user.isAdmin == 0" class="card-title">Utilisateur standard</h6>
+                  <div class="card-block">
+                      <button [ngClass]="{'disabled':user.user_id == loggedUser}" class="btn btn-danger btn-sm"  (click)="openDelModal(user.user_id,user.username)"><i class="fas fa-times"></i></button>
+                      <button [ngClass]="{'disabled':user.user_id == loggedUser}" class="btn btn-primary btn-sm" (click)="openPutModal(user.user_id,user.username,user.isAdmin)"><i class="fas fa-edit"></i></button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
 
 <ngx-smart-modal customClass="nsm-centered" [closable]="false" #delModal identifier="delModal">
   <h4 *ngIf="delModal.hasData()">Voulez-vous vraiment supprimer {{delModal.getData().username}} ?</h4>
@@ -35,3 +63,12 @@
   <button style="margin:10px 10px;" class="btn btn-secondary" (click)="putModal.close()"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
   <button *ngIf="putModal.hasData()" class="btn btn-primary" (click)="putUser(putModal.getData().user_id,putModal.getData().myCheck)"><i class="fas fa-check"></i> Valider</button>
 </ngx-smart-modal>
+
+<button style="display:none;" class="btn btn-lg btn-block font-medium-1 btn-outline-teal mb-1 growl-notification">Growl Notification</button>
+<div class="growl-notification-example" style="display:none;">
+    <i class="icon-checkmark22"></i> Utilisateur modifié avec succès
+</div>
+<button style="display:none;" class="btn btn-lg btn-block font-medium-1 btn-outline-teal mb-1 growl-add">Growl Notification</button>
+<div class="growl-notification-add" style="display:none;">
+    <i class="icon-checkmark22"></i> Utilisateur supprimé avec succès
+</div>

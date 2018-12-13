@@ -3,6 +3,8 @@ import { UserService } from '../services/user.service';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { NgxSmartModalService } from 'ngx-smart-modal';
+import * as $ from 'jquery';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-updateuser',
@@ -14,11 +16,19 @@ export class UpdateuserComponent implements OnInit {
   private users = [];
   public isAdmin = this._authService.getUserType;
   
-  constructor(private _userService:UserService,private router:Router,private _authService:AuthService, private modal:NgxSmartModalService) {
+  constructor(private _location: Location,private _userService:UserService,private router:Router,private _authService:AuthService, private modal:NgxSmartModalService) {
     
   }
   
   public loggedUser = parseInt(this._authService.getUserID);
+  gotoHome(){
+    this.router.navigate(['home'])
+  }
+
+  gotoAdmin(){
+    this.router.navigate(['admin'])
+  }
+
   openDelModal(id,username) {
     let obj: Object = {
       'user_id': id,
@@ -55,7 +65,7 @@ export class UpdateuserComponent implements OnInit {
           }
         }
         this.modal.getModal('delModal').close();
-
+        $('.growl-add').trigger( "click" );
         console.log("success");
       });
 
@@ -81,7 +91,7 @@ export class UpdateuserComponent implements OnInit {
           }
         }
         this.modal.getModal('putModal').close();
-
+        $('.growl-notification').trigger( "click" );
         console.log("success");
       });
 
@@ -94,6 +104,16 @@ export class UpdateuserComponent implements OnInit {
     }
 
     this._userService.getAllUsers().subscribe(data => this.users = data);
+
+
+    $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $(".elSujet").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
   }
 
 }

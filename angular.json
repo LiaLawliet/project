@@ -40,6 +40,7 @@
               "src/assets/app-assets/vendors/css/forms/spinner/jquery.bootstrap-touchspin.css",
               "src/assets/app-assets/vendors/css/forms/toggle/bootstrap-switch.min.css",
               "src/assets/app-assets/css/app.css",
+              "src/assets/app-assets/css/pages/users.css",
             
               "src/assets/app-assets/css/bootstrap-extended.css",
               "src/assets/app-assets/css/colors.css",
@@ -62,6 +63,7 @@
               "src/assets/app-assets/vendors/js/ui/perfect-scrollbar.jquery.min.js",
               "src/assets/app-assets/vendors/js/ui/unison.min.js",
               "src/assets/app-assets/vendors/js/ui/blockUI.min.js",
+              "src/assets/app-assets/js/scripts/extensions/block-ui.js",
               "src/assets/app-assets/vendors/js/ui/jquery.matchHeight-min.js",
               "src/assets/app-assets/vendors/js/ui/jquery-sliding-menu.js",
               "src/assets/app-assets/vendors/js/ui/prism.min.js",

@@ -108,28 +108,28 @@ app.route('/api/themes').get((req, res) => {
 })
 
 app.route('/api/themes').post((req, res) => {
-  connection.query("INSERT INTO themes VALUES (NULL,'?','0')",[req.body.theme_name], function (err, result) {
+  connection.query("INSERT INTO themes VALUES (NULL,?,?,'default.jpg','0')",[req.body.theme_name,req.body.description], function (err, result) {
     if (err) throw err;
     res.send(result);
   });
 })
 
 app.route('/api/themes/:id').put((req, res) => {
-  connection.query("UPDATE themes SET theme_name = '?' WHERE themes.id = ?",[req.body.theme_name,req.params.id], function (err, result) {
+  connection.query("UPDATE themes SET theme_name = ? , description = ? WHERE themes.id = ?",[req.body.theme_name,req.body.description,req.params.id], function (err, result) {
     if (err) throw err;
     res.send(result);
   });
 })
 
 app.route('/api/showthemes/:id').put((req, res) => {
-  connection.query("UPDATE themes SET hidden = '?' WHERE themes.id = ?",[req.body.hidden,req.params.id], function (err, result) {
+  connection.query("UPDATE themes SET hidden = ? WHERE themes.id = ?",[req.body.hidden,req.params.id], function (err, result) {
     if (err) throw err;
     res.send(result);
   });
 })
 
 app.route('/api/hidethemes/:id').put((req, res) => {
-  connection.query("UPDATE themes SET hidden = '?' WHERE themes.id = ?",[req.body.hidden,req.params.id], function (err, result) {
+  connection.query("UPDATE themes SET hidden = ? WHERE themes.id = ?",[req.body.hidden,req.params.id], function (err, result) {
     if (err) throw err;
     res.send(result);
   });
@@ -163,7 +163,7 @@ app.route('/api/sujets/sujet/:id').get((req, res) => {
 })
 
 app.route('/api/sujets').post((req, res) => {
-  connection.query("INSERT INTO sujets VALUES (NULL,?,?,'0','?','?')",[req.body.theme_id,req.body.sujet_name,req.body.creator, req.body.hidden], function (err, result) {
+  connection.query("INSERT INTO sujets VALUES (NULL,?,?,'0',?,?)",[req.body.theme_id,req.body.sujet_name,req.body.creator, req.body.hidden], function (err, result) {
     if (err) throw err;
     res.send(result);
   });
@@ -239,7 +239,7 @@ app.route('/api/qrs').get((req, res) => {
 })
 
 app.route('/api/qrs').post((req, res) => {
-  connection.query("INSERT INTO qrs VALUES (NULL,'?','?','?')",[req.body.theme_id, req.body.question, req.body.answer], function (err, result) {
+  connection.query("INSERT INTO qrs VALUES (NULL,?,?,?)",[req.body.theme_id, req.body.question, req.body.answer], function (err, result) {
     if (err) throw err;
     res.send(result);
   });

@@ -5,6 +5,7 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { HttpClient,HttpEventType } from '@angular/common/http';
 import { AuthService } from '../auth.service';
 import { Router} from '@angular/router';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-putthemes',
@@ -23,7 +24,9 @@ export class PutthemesComponent implements OnInit {
               private _themeService: ThemeService,
               private _sujetService: SujetService,
               private modal: NgxSmartModalService,
-              private http: HttpClient) { }
+              private http: HttpClient) {
+                
+               }
 
   selectedFile: File = null;
 
@@ -66,6 +69,7 @@ export class PutthemesComponent implements OnInit {
         }
       }
       this.modal.getModal('imgModal').close();
+      $('.growl-notification').trigger( "click" );
     })
   }
 
@@ -73,10 +77,11 @@ export class PutthemesComponent implements OnInit {
     this.modal.getModal('addModal').open();
   }
 
-  openPutModal(id, theme_name) {
+  openPutModal(id, theme_name,description) {
     let obj: Object = {
       'id': id,
-      'theme_name':theme_name
+      'theme_name':theme_name,
+      'description':description
     }
     this.modal.resetModalData('putModal')
     this.modal.setModalData(obj, 'putModal');
@@ -101,39 +106,43 @@ export class PutthemesComponent implements OnInit {
     this.modal.getModal('hideModal').open();
   }
 
-  addTheme(theme_name: string) {
+  addTheme(theme_name: string, description: string) {
     if (this._authService.loggedOut) {
       this.router.navigate(['login'])
     } else {
       let themes = this.themes
       let idPlus = this.getId();
-      this._themeService.insertTheme(theme_name).subscribe(function (data) {
+      this._themeService.insertTheme(theme_name,description).subscribe(function (data) {
         console.log(data);
         themes.push({
           id: idPlus,
           theme_name: theme_name,
+          description: description,
+          image: 'default.jpg',
           hidden: 0
         })
         console.log("success");
       });
     this.modal.getModal('addModal').close();
+    $('.growl-add').trigger( "click" );
     }
   }
 
-  putTheme(id: number, theme_name:string) {
+  putTheme(id: number, theme_name:string, description:string) {
     if (this._authService.loggedOut) {
       this.router.navigate(['login'])
     } else {
       console.log()
-      this._themeService.updateTheme(id, theme_name).subscribe(() => {
+      this._themeService.updateTheme(id, theme_name,description).subscribe(() => {
        
         for (var i = 0; i < this.themes.length; i++) {
           if (this.themes[i].id == id) {
             this.themes[i].theme_name = theme_name;
+            this.themes[i].description = description;
           }
         }
         this.modal.getModal('putModal').close();
-
+        $('.growl-notification').trigger( "click" );
         console.log("success");
       });
 
@@ -154,7 +163,7 @@ export class PutthemesComponent implements OnInit {
             }
           }
           this.modal.getModal('showModal').close();
-
+          $('.growl-notification').trigger( "click" );
           console.log('Sujets modifiés');
         })
       });
@@ -175,7 +184,7 @@ export class PutthemesComponent implements OnInit {
             }
           }
           this.modal.getModal('hideModal').close();
-
+          $('.growl-notification').trigger( "click" );
           console.log('Sujets modifiés');
         })
       });
