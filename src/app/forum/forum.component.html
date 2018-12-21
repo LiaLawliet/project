@@ -1,23 +1,74 @@
-<div>
-  <input class="rounded form-control" type="text" id="myInput">
-</div>
-<div class="row">
-  <div class="col-md-3 offset-md-9" style="text-align:center">
-    <button class="btn btn-primary text-right" (click)="openAddModal()"><i class="fas fa-plus"></i> Ajouter un sujet de discussion</button>
-  </div>
-</div>
-<div class="elSujet" *ngFor="let sujet of sujets" [attr.id]="sujet.id">
-  <a (click)="gotoInputs(sujet.id)"><span *ngIf="sujet.resolu == 1">[Résolu]</span> {{sujet.sujet_name}}</a>
-  <hr>
+<div class="container" style="padding-top:10vh">
+	<div class="row">
+		<div class="content-header">
+			<div class="breadcrumb-wrapper col-xs-12">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a style="color:rgb(49, 51, 158)" (click)="gotoHome()">Acceuil</a>
+					</li>
+					<li class="breadcrumb-item active">Forums
+					</li>
+				</ol>
+			</div>
+			<div class="content-header-left col-md-6 col-xs-12">
+				<h3 class="content-header-title mb-0">Forums</h3>
+			</div>
+			<div class="content-header-right col-md-6 col-xs-12">
+				<div class="float-md-right">
+					<button class="btn btn-primary text-right" (click)="openAddModal()"><i class="fas fa-plus"></i> Ajouter un
+						sujet de discussion</button>
+				</div>
+			</div>
+			<div class="content-header-lead col-xs-12 mt-1">
+				<p class="lead">Trouvez, ici, les sujets de discussions proposées selon les thèmes différents.</p>
+			</div>
+		</div>
+		<div class="col-md-4 offset-md-8 col-xs-12">
+			<fieldset class="form-group position-relative has-icon-left">
+				<input type="text" class="form-control round" id="myInput" placeholder="Rechercher">
+				<div class="form-control-position">
+					<i class="fas fa-search"></i>
+				</div>
+			</fieldset>
+		</div>
+		<div class="col-xs-12">
+			<div class="content-wrapper">
+				<div class="content-body">
+					<section *ngFor="let theme of themes" id="theme{{theme.id}}" class="card ">
+						<div style="background-color : #0096883b" class="card-header">
+							<h2 class="card-title">{{theme.theme_name}}</h2>
+						</div>
+						<div *ngFor="let sujet of sujets" class="card-body collapse in" (click)="gotoInputs(sujet.id)">
+							<div *ngIf="sujet.theme_name == theme.theme_name" id="sujet{{sujet.id}}" class="card-block p-1 elSujet">
+								<div class="inline-block imgSujet" style="width:15%;text-align: center">
+									<img class="sujetImg rounded-circle" style="width: 75px;height: 75px;" alt="User Image" src="http://localhost:8000/public/uploads/{{sujet.image}}">
+								</div>
+								<div class="inline-block desSujet" style="width:85%">
+									<h4><a>{{sujet.sujet_name}}</a></h4>
+									<span>Thème: <b>{{sujet.theme_name}}</b></span>
+									<span *ngIf="sujet.resolu == 0" style="float: right;color: tomato">Ouvert</span>
+									<span *ngIf="sujet.resolu == 1" style="float: right;color: teal">Fermé</span>
+									<ng-container *ngFor="let nb of nbComments">
+										<span *ngIf="nb.id == sujet.id" class="mr-1" style="float: right;"><i class="fas fa-comments"></i> {{nb.nbCom}}</span>
+									</ng-container>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
-<ngx-smart-modal [closable]="false" #addModal identifier="addModal">
-  <h4>Thème</h4>
-  <select #selectTheme>
-      <option *ngFor="let theme of themes" value="{{theme.id}}">{{theme.theme_name}}</option>
-  </select>
-  <h4>Titre du sujet</h4>
-  <input #inputQ type="text" class="form-control"  placeholder="Votre question">
-  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="addModal.close()"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
-  <button class="btn btn-primary" (click)="addSujet(selectTheme.value,inputQ.value);"><i class="fas fa-check"></i> Ajouter</button>
+<ngx-smart-modal customClass="nsm-centered" [closable]="false" #addModal identifier="addModal">
+	<h4>Thème</h4>
+	<select #selectTheme>
+		<option *ngFor="let theme of themes" value="{{theme.id}}">{{theme.theme_name}}</option>
+	</select>
+	<h4>Titre du sujet</h4>
+	<input #inputQ type="text" class="form-control" placeholder="Votre question">
+	<button style="margin:10px 10px;" class="btn btn-secondary" (click)="addModal.close()"><i class="fas fa-long-arrow-alt-left"></i>
+		Annuler</button>
+	<button class="btn btn-primary" (click)="addSujet(selectTheme.value,inputQ.value);"><i class="fas fa-check"></i>
+		Ajouter</button>
 </ngx-smart-modal>

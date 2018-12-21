@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-signin',
@@ -15,6 +16,8 @@ export class SigninComponent implements OnInit {
   constructor(private _userService: UserService,private router: Router) { }
 
   ngOnInit() {
+    $('body').css('background','url(http://localhost:8000/public/uploads/bg-login.jpg) no-repeat center fixed');
+		$('body').css('background-size','cover');
   }
 
   addUser(email: string, username: string, password: string, checkpassword: string){

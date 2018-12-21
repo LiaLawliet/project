@@ -44,6 +44,8 @@ app.use(
       '/api/sujets',
       '/api/qrs',
       '/api/users',
+      '/api/forum',
+      '/api/forumNbCom',
       /^\/api\/sujets\/.*/,
       { url: /^\/api\/comments\/.*/, methods: ['GET'] },
       { url: /^\/api\/nothiddensujets\/.*/, methods: ['GET'] },
@@ -141,6 +143,16 @@ app.route('/api/hidethemes/:id').put((req, res) => {
 
 /***** SUJETS ******/
 
+// SELECT `c`.`sujet_id` AS `sid` ,(SELECT COUNT(`id`) AS `nbrcomments` FROM `comments` `c1` WHERE `c1`.`sujet_id`=`c`.`sujet_id` ) AS `nb` FROM `comments` `c`  WHERE `sender_id` = 1 GROUP BY `c`.`sujet_id`
+
+app.route('/api/forumNbCom').get((req, res) => {
+  connection.query("SELECT sujets.id, COUNT(comments.id) AS nbCom FROM sujets LEFT JOIN comments ON sujets.id = comments.sujet_id GROUP BY sujets.id", function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+})
+
+
 app.route('/api/sujets').get((req, res) => {
   connection.query("SELECT * FROM sujets", function (err, result) {
     if (err) throw err;
@@ -148,8 +160,29 @@ app.route('/api/sujets').get((req, res) => {
   });
 })
 
+app.route('/api/putsujets').get((req, res) => {
+  connection.query("SELECT sujets.id, sujet_name, theme_id,theme_name, resolu, username, sujets.hidden FROM sujets,users,themes WHERE creator=user_id AND theme_id = themes.id", function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+})
+
+app.route('/api/forum').get((req, res) => {
+  connection.query("SELECT sujets.id, sujet_name, theme_name, resolu, username, sujets.hidden, users.image FROM sujets,users,themes WHERE creator=user_id AND theme_id = themes.id", function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+})
+
+app.route('/api/createdsujets/:id').get((req, res) => {
+  connection.query("SELECT sujets.id, sujet_name, theme_name, resolu, sujets.hidden FROM sujets,themes WHERE creator = ? AND theme_id = themes.id",[req.params.id], function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+})
+
 app.route('/api/nothiddensujets/:id').get((req, res) => {
-  connection.query("SELECT * FROM sujets WHERE sujets.theme_id = ? AND sujets.hidden = 0",[req.params.id], function (err, result) {
+  connection.query("SELECT sujets.id, sujet_name, theme_name, resolu, username, sujets.hidden, users.image FROM sujets,users,themes WHERE sujets.theme_id = ?  AND theme_id = themes.id AND creator=user_id",[req.params.id], function (err, result) {
     if (err) throw err;
     res.send(result);
   });
@@ -246,14 +279,14 @@ app.route('/api/qrs').post((req, res) => {
 })
 
 app.route('/api/qrs/:id').delete((req, res) => {
-  connection.query("DELETE FROM qrs WHERE qrs_id = '?'",[req.params.id], function (err, result) {
+  connection.query("DELETE FROM qrs WHERE qrs_id = ?",[req.params.id], function (err, result) {
     if (err) throw err;
     res.send(result);
   });
 });
 
 app.route('/api/qrs/:id').put((req, res) => {
-  connection.query("UPDATE qrs SET question = '?',answer = '?' WHERE qrs.qrs_id = ?",[req.body.question,req.body.answer,req.params.id], function (err, result) {
+  connection.query("UPDATE qrs SET question = ?,answer = ? WHERE qrs.qrs_id = ?",[req.body.question,req.body.answer,req.params.id], function (err, result) {
     if (err) throw err;
     res.send(result);
   });
@@ -291,14 +324,14 @@ app.route('/api/comments').get((req, res) =>{
 })
 
 app.route('/api/comments/:id').get((req, res) => {
-  connection.query("SELECT id,sender_id, sujet_id, message, date, username FROM comments,users WHERE sender_id = user_id AND sujet_id = ? ORDER BY comments.date ASC",[req.params.id], function (err, result) {
+  connection.query("SELECT id,sender_id, sujet_id, message, date, username, image FROM comments,users WHERE sender_id = user_id AND sujet_id = ? ORDER BY comments.date ASC",[req.params.id], function (err, result) {
     if (err) throw err;
     res.send(result);
   });
 });
 
-app.route('/api/comments/:id').post((req, res) => {
-  connection.query("INSERT INTO comments VALUES (?,?,?,?,?)", [req.body.id , req.body.sender_id , req.params.id, req.body.message , req.body.date],function (err, result) {
+app.route('/api/comments').post((req, res) => {
+  connection.query("INSERT INTO comments VALUES (NULL,?,?,?,?)", [req.body.sender_id , req.body.sujet_id, req.body.message , req.body.date],function (err, result) {
     if (err) throw err;
     res.send(result);
   });
@@ -351,22 +384,22 @@ app.route('/api/users/:id').put((req, res) => {
   });
 });
 
-app.route('/api/users/username/:id').put((req, res) => {
-  connection.query("UPDATE users SET username = '?' WHERE users.user_id = ?",[req.body.username, req.params.id], function (err, result) {
+app.route('/api/username/:id').put((req, res) => {
+  connection.query("UPDATE users SET username = ? WHERE users.user_id = ?",[req.body.username, req.params.id], function (err, result) {
     if (err) throw err;
     res.send(result);
   });
 });
 
-app.route('/api/users/email/:id').put((req, res) => {
-  connection.query("UPDATE users SET email = '?' WHERE users.user_id = ?",[req.body.email, req.params.id], function (err, result) {
+app.route('/api/email/:id').put((req, res) => {
+  connection.query("UPDATE users SET email = ? WHERE users.user_id = ?",[req.body.email, req.params.id], function (err, result) {
     if (err) throw err;
     res.send(result);
   });
 });
 
-app.route('/api/users/password/:id').put((req, res) => {
-  connection.query("UPDATE users SET password = '?' WHERE users.user_id = ?",[req.body.password, req.params.id], function (err, result) {
+app.route('/api/password/:id').put((req, res) => {
+  connection.query("UPDATE users SET password = ? WHERE users.user_id = ?",[req.body.password, req.params.id], function (err, result) {
     if (err) throw err;
     res.send(result);
   });

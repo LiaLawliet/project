@@ -4,4 +4,4 @@ export interface Comment {
   sujet_id: number,
   message: string,
   date: Date
-  }
+}

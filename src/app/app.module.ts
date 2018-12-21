@@ -32,6 +32,7 @@ import { ProfileService } from './services/profile.service';
 
 import { AuthGuard } from './auth.guard';
 import { AppRoutingModule } from './app-routing.module';
+import { ThemeService } from './services/theme.service';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -74,7 +75,7 @@ export function tokenGetter() {
     NgbModule.forRoot(),
     NgxSmartModalModule.forRoot()
   ],
-  providers: [InputComponent, CommentService, QrService, AuthService,UserService, AuthGuard, ProfileService],
+  providers: [InputComponent, CommentService, QrService,ThemeService, AuthService,UserService, AuthGuard, ProfileService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

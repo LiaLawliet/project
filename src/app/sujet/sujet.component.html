@@ -1,28 +1,77 @@
-<div>
-  <input class="rounded form-control" type="text" id="myInput">
-</div>
-
-<ngb-accordion [closeOthers]="true">
-    <ngb-panel *ngFor="let qr of qrs" id="static-{{qr.qrs_id}}" title="{{qr.question}}" class="elSujet">
-        <ng-template ngbPanelContent>
-          {{qr.answer}}
-        </ng-template>
-    </ngb-panel>
-</ngb-accordion>
-
-
-<div class="row">
-    <div class="col-md-3 offset-md-9" style="text-align:center">
-      <button class="btn btn-primary text-right" (click)="openAddModal()"><i class="fas fa-plus"></i> Ajouter un sujet de discussion</button>
+<div class="container" style="padding-top:10vh">
+    <div class="row">
+        <div class="content-header">
+            <div class="breadcrumb-wrapper col-xs-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a style="color:rgb(49, 51, 158)" (click)="gotoHome()">Acceuil</a>
+                    </li>
+                    <li class="breadcrumb-item active">{{theme.theme_name}}
+                    </li>
+                </ol>
+            </div>
+            <div class="content-header-left col-md-6 col-xs-12">
+                <h3 class="content-header-title mb-0">{{theme.theme_name}}</h3>
+            </div>
+            <div class="content-header-lead col-xs-12 mt-1">
+                <p class="lead">{{theme.description}}</p>
+            </div>
+            <div class="content-header-right col-xs-12">
+                <div class="float-md-right">
+                <button class="btn btn-primary text-right" (click)="openAddModal()"><i class="fas fa-plus"></i> Ajouter un
+                    sujet de discussion</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="card mt-2">
+                <div style="background-color : #0096883b" class="card-header">
+                    <h2 class="card-title" style="display:inline-block">Forums</h2>
+                    <fieldset class="form-group position-relative has-icon-left m-0" style="display:inline-block;float:right;width: 33%">
+                        <input type="text" class="form-control round" id="myInput" placeholder="Rechercher">
+                        <div class="form-control-position">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </fieldset>
+                </div>
+                <div *ngFor="let sujet of sujets" class="card-body collapse in searchForum" (click)="gotoInputs(sujet.id)">
+                    <div id="sujet{{sujet.id}}" class="card-block p-1 elSujet">
+                        <div class="inline-block imgSujet" style="width:15%;text-align: center">
+                            <img class="sujetImg rounded-circle" style="width:75px;height:75px" alt="User Image" src="http://localhost:8000/public/uploads/{{sujet.image}}">
+                        </div>
+                        <div class="inline-block" style="width:85%">
+                            <h4><a>{{sujet.sujet_name}}</a></h4>
+                            <span>Créateur: <b>{{sujet.username}}</b></span>
+                            <span *ngIf="sujet.resolu == 0" style="float: right;color: tomato">Ouvert</span>
+                            <span *ngIf="sujet.resolu == 1" style="float: right;color: teal">Fermé</span>
+                            <ng-container *ngFor="let nb of nbComments">
+                                <span *ngIf="nb.id == sujet.id" class="mr-1" style="float: right;"><i class="fas fa-comments"></i> {{nb.nbCom}}</span>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div style="background-color : #0096883b" class="card-header">
+                    <h2 class="card-title" style="display:inline-block">Questions fréquemment posées</h2>
+                    <fieldset class="form-group position-relative has-icon-left m-0" style="display:inline-block;float:right;width: 33%">
+                        <input type="text" class="form-control round" id="myInput2" placeholder="Rechercher">
+                        <div class="form-control-position">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </fieldset>
+                </div>
+                <div *ngFor="let qr of qrs" class="card-body collapse in searchFaq">
+                    <div class="card-block p-1">
+                        <h3>{{qr.question}}</h3>
+                        <p>{{qr.answer}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-
-
-<div class="elSujet" *ngFor="let sujet of sujets" [attr.id]="sujet.id">
-    <a (click)="gotoInputs(sujet.id)" ><span *ngIf="sujet.resolu == 1">[Résolu]</span> {{sujet.sujet_name}}</a>
-    <hr>
 </div>
-<ngx-smart-modal [closable]="false" #addModal identifier="addModal">
+
+<ngx-smart-modal customClass="nsm-centered" [closable]="false" #addModal identifier="addModal">
     <h4>Thème</h4>
     <select *ngIf="addModal.hasData()" #selectTheme [value]='addModal.getData().theme_id'(click)="addModal.getData().theme_id=selectTheme.value">
         <option *ngFor="let theme of themes" value="{{theme.id}}">{{theme.theme_name}}</option>

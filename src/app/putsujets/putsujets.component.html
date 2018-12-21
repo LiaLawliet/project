@@ -1,26 +1,72 @@
-<div class="row">
-  <div class="col-md-3 offset-md-9" style="text-align:center">
-    <button class="btn btn-primary text-right" (click)="openAddModal()"><i class="fas fa-plus"></i> Ajouter un thème</button>
+<div class="container" style="padding-top:10vh">
+  <div class="content-header row">
+    <div class="breadcrumb-wrapper ">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a style="color:rgb(49, 51, 158)" (click)="gotoHome()">Acceuil</a>
+        </li>
+        <li class="breadcrumb-item"><a style="color:rgb(49, 51, 158)" (click)="gotoAdmin()">Admin</a>
+        </li>
+        <li class="breadcrumb-item active">Forums
+        </li>
+      </ol>
+    </div>
+    <div class="content-header-left col-md-6 col-xs-12">
+      <h3 class="content-header-title mb-0">Forums</h3>
+    </div>
+    <div class="content-header-right col-md-6 col-xs-12">
+      <div class="float-md-right">
+        <button class="btn btn-primary text-right" (click)="openAddModal()"><i class="fas fa-plus"></i> Ajouter un sujet</button>
+      </div>
+    </div>
+    <div class="content-header-lead col-xs-12 mt-1">
+      <p class="lead">Manipulez les sujets de discussions différents. Modifiez leurs titres, leurs thèmes ou leurs états.</p>
+    </div>
   </div>
-</div>
-
-<div *ngFor="let sujet of sujets" id="static-{{sujet.id}}" class="elSujet">
   <div class="row">
-    <div class="col-md-10" [ngStyle]="{'background-color':sujet.hidden == 0 ? '#99ff99' : '#ff8080' }">
-      <p>
-        {{sujet.sujet_name}}
-      </p>
+    <div class="col-md-4 offset-md-8 col-xs-12">
+      <fieldset class="form-group position-relative has-icon-left">
+          <input type="text" class="form-control round" id="myInput" placeholder="Rechercher">
+          <div class="form-control-position">
+              <i class="fas fa-search"></i>
+          </div>
+      </fieldset>
     </div>
-    <div class="col-md-2">
-        <button title="Modifier ce sujet" class="btn btn-primary btn-sm" (click)="openPutModal(sujet.id,sujet.theme_id,sujet.sujet_name)"><i class="fas fa-edit"></i></button>
-        <button *ngIf="sujet.hidden == 0" title="Cacher le sujet aux utilisateurs" class="btn btn-warning btn-sm" (click)="openHideModal(sujet.id)"><i class="far fa-eye-slash"></i></button>
-        <button *ngIf="sujet.hidden == 1" title="Autoriser les utilisateurs à voir ce sujet" class="btn btn-success btn-sm" (click)="openShowModal(sujet.id)"><i class="far fa-eye"></i></button>
+    <div class="col-xs-12">
+      <div class="card">
+        <div class="card-body collapse in">
+          <div class="card-block card-dashboard">
+            <table class="table table-bordered base-style">
+              <thead class="thead-inverse">
+                <tr>
+                  <th style="width: 40%">Sujet</th>
+                  <th>Theme</th>
+                  <th>Créateur</th>
+                  <th>Etat</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let sujet of sujets" class="elSujet" [ngStyle]="{'background-color':sujet.hidden == 0 ? '#c0ffc0':'#ffb2b2'}">
+                  <td>{{sujet.sujet_name}}</td>
+                  <td>{{sujet.theme_name}}</td>
+                  <td>{{sujet.username}}</td>
+                  <td><span *ngIf="sujet.resolu == 0">Ouvert</span><span *ngIf="sujet.resolu == 1">Fermé</span></td>
+                  <td>
+                    <button title="Modifier ce sujet" class="btn btn-primary btn-sm" (click)="openPutModal(sujet.id,sujet.theme_id,sujet.sujet_name)"><i class="fas fa-edit"></i></button>
+                    <button *ngIf="sujet.hidden == 0" title="Cacher le sujet aux utilisateurs" class="btn btn-warning btn-sm" (click)="openHideModal(sujet.id)"><i class="far fa-eye-slash"></i></button>
+                    <button *ngIf="sujet.hidden == 1" title="Autoriser les utilisateurs à voir ce sujet" class="btn btn-success btn-sm" (click)="openShowModal(sujet.id)"><i class="far fa-eye"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>				
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <hr>
 </div>
 
-<ngx-smart-modal [closable]="false" #putModal identifier="putModal">
+
+<ngx-smart-modal customClass="nsm-centered" [closable]="false" #putModal identifier="putModal">
   <h4>Modifiez le thème</h4>
     <select *ngIf="putModal.hasData()" #selectTheme [value]='putModal.getData().theme_id' (click)="putModal.getData().theme_id=selectTheme.value">
         <option *ngFor="let theme of themes" value="{{theme.id}}">{{theme.theme_name}}</option>
@@ -31,19 +77,19 @@
   <button class="btn btn-primary" (click)="putSujet(putModal.getData().id,putModal.getData().theme_id,putModal.getData().sujet_name);putModal.getData().sujet_name='';"><i class="fas fa-check"></i> Modifier</button>
 </ngx-smart-modal>
 
-<ngx-smart-modal [closable]="false" #showModal identifier="showModal" >
+<ngx-smart-modal customClass="nsm-centered" [closable]="false" #showModal identifier="showModal" >
   <h4>Autoriser les utilisateurs à voir ce thème ?</h4>
   <button style="margin:10px 10px;" class="btn btn-secondary" (click)="showModal.close()"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
   <button class="btn btn-success" (click)="showSujet(showModal.getData().id)"><i class="fas fa-check"></i> Valider</button>
 </ngx-smart-modal>
 
-<ngx-smart-modal [closable]="false" #hideModal identifier="hideModal" >
+<ngx-smart-modal customClass="nsm-centered" [closable]="false" #hideModal identifier="hideModal" >
   <h4>Cacher ce thème aux utilisateurs ?</h4>
   <button style="margin:10px 10px;" class="btn btn-secondary" (click)="hideModal.close()"><i class="fas fa-long-arrow-alt-left"></i> Annuler</button>
   <button class="btn btn-warning" (click)="hideSujet(hideModal.getData().id)"><i class="fas fa-check"></i> Valider</button>
 </ngx-smart-modal>
 
-<ngx-smart-modal [closable]="false" #addModal identifier="addModal">
+<ngx-smart-modal customClass="nsm-centered" [closable]="false" #addModal identifier="addModal">
     <h4>Choisissez le thème</h4>
     <select #selectTheme2>
         <option *ngFor="let theme of themes" value="{{theme.id}}">{{theme.theme_name}}</option>

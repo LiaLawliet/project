@@ -11,12 +11,12 @@ export class CommentService {
     return this.http.get<Comment[]>('http://localhost:8000/api/comments');
   }
 
-  getComments(id:number): Observable<Comment[]> {
-    return this.http.get<Comment[]>('http://localhost:8000/api/comments/'+id);
+  getComments(id:number): Observable<void> {
+    return this.http.get<void>('http://localhost:8000/api/comments/'+id);
   }
 
-  insertComment(id: number,comment: Comment): Observable<Comment> {
-    return this.http.post<Comment>('http://localhost:8000/api/comments/'+ id, comment);
+  insertComment(sender_id:number,sujet_id: number,message: string, date: Date): Observable<void> {
+    return this.http.post<void>('http://localhost:8000/api/comments', {sender_id:sender_id,sujet_id:sujet_id,message:message,date:date});
   }
   updateComment(id: number,message: string): Observable<void> {
     return this.http.put<void>('http://localhost:8000/api/comments/' + id, {message:message});

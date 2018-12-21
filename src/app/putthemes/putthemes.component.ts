@@ -29,6 +29,15 @@ export class PutthemesComponent implements OnInit {
                }
 
   selectedFile: File = null;
+  url = '';
+
+  gotoHome(){
+    this.router.navigate(['home'])
+  }
+
+  gotoAdmin(){
+    this.router.navigate(['admin'])
+  }
 
   getColor(hidden){
     if (hidden == 0) {
@@ -40,6 +49,15 @@ export class PutthemesComponent implements OnInit {
 
   onFileSelected(event){
     this.selectedFile = <File>event.target.files[0];
+    if (event.target.files && event.target.files[0]) {
+      var reader = new FileReader();
+
+      reader.readAsDataURL(event.target.files[0]); // read file as data url
+
+      reader.onload = (event) => { // called once readAsDataURL is completed
+        this.url = event.target['result'];
+      }
+    }
   }
 
   openImgModal(id) {
@@ -49,6 +67,14 @@ export class PutthemesComponent implements OnInit {
     this.modal.resetModalData('imgModal')
     this.modal.setModalData(obj, 'imgModal');
     this.modal.getModal('imgModal').open();
+  }
+
+  getImage(){
+    if (this.url == '') {
+      return 'none';
+    }else{
+      return 'block';
+    }
   }
 
   onUpload(id){
@@ -69,6 +95,7 @@ export class PutthemesComponent implements OnInit {
         }
       }
       this.modal.getModal('imgModal').close();
+      this.url = '';
       $('.growl-notification').trigger( "click" );
     })
   }
@@ -203,7 +230,8 @@ export class PutthemesComponent implements OnInit {
     if (this.isAdmin != '1') {
       this.router.navigate(['home'])
     }
-
+    $('body').css('background','none')
+    $('body').css('background-color','#F3F3F3')
     this._themeService.getAllThemes().subscribe( data => this.themes = data);
   }
 

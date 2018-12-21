@@ -6,10 +6,6 @@ a:hover{
     color: rgb(88, 88, 226);
 }
 
-::ng-deep body  {
-    background-color: #F3F3F3;
-}
-
 .card{
     box-shadow: 0px 0px 10px 0px #000000b8;
 }

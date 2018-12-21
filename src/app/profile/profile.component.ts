@@ -4,12 +4,15 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Router } from '@angular/router';
 import { HttpClient,HttpEventType } from '@angular/common/http';
 import { ProfileService } from '../services/profile.service';
+import { SujetService } from '../services/sujet.service';
 import { ResourceLoader } from '@angular/compiler';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
+  providers:[SujetService,ProfileService]
 })
 export class ProfileComponent implements OnInit {
 
@@ -17,11 +20,48 @@ export class ProfileComponent implements OnInit {
   public error2 : string;
   private userId = parseInt(this.auth.getUserID) 
   
-  constructor(private auth:AuthService,private http:HttpClient, private modal:NgxSmartModalService,private router: Router, private _profileService:ProfileService) { }
+  constructor(private auth:AuthService,private _sujetService : SujetService, private http:HttpClient, private modal:NgxSmartModalService,private router: Router, private _profileService:ProfileService) {
+    
+   }
+  public sujetsCreated =[];
   selectedFile: File = null;
+  url = '';
+  gotoInputs(id) {
+		this.router.navigate(['sujet/' + id]);
+  }
+  
+  ngOnInit() {
+    $('body').css('background','none')
+    $('body').css('background-color','#F3F3F3')
+    if (window.innerWidth <= 767 ) {
+      $('.profil-header').css('text-align','center')
+    }
+    this._sujetService.getCreated(this.userId).subscribe( data => this.sujetsCreated = data);
+  }
 
   onFileSelected(event){
     this.selectedFile = <File>event.target.files[0];
+    if (event.target.files && event.target.files[0]) {
+      var reader = new FileReader();
+
+      reader.readAsDataURL(event.target.files[0]); // read file as data url
+
+      reader.onload = (event) => { // called once readAsDataURL is completed
+        this.url = event.target['result'];
+      }
+    }
+  }
+
+  openImgModal() {
+    this.modal.getModal('imgModal').open();
+  }
+
+  getImage(){
+    if (this.url == '') {
+      return 'none';
+    }else{
+      return 'block';
+    }
   }
 
   onUpload(){
@@ -36,12 +76,11 @@ export class ProfileComponent implements OnInit {
       }else if(event.type === HttpEventType.Response){
         console.log(event.body)
         localStorage.setItem('image', event.body['filename']);
+        this.modal.getModal('imgModal').close();
+        this.url = '';
       }
       
     })
-  }
-
-  ngOnInit() {    
   }
 
   openUsernameModal(username) {

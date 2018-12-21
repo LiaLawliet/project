@@ -1,42 +1,78 @@
-<div class="com" *ngFor="let comment of comments" [attr.id]="comment.id">
-  <p style="font-size: 10px">Envoyé le {{ comment.date | date:'short' }}  {{comment.username}} {{comment.id}}</p>
-  <p>{{comment.message}}</p>
-  <button *ngIf="isAdmin == 1 || sender == comment.sender_id" class="btn btn-danger btn-sm"  (click)="openDelModal(comment.id)"><i class="fas fa-times"></i></button>
-  <button *ngIf="sender == comment.sender_id" class="btn btn-primary btn-sm"  (click)="openPutModal(comment.id,comment.message)"><i class="fas fa-edit"></i></button>
-  <hr>
- 
+<div class="container" style="padding-top:10vh">
+	<div class="row">
+		<div class="content-header">
+			<div class="breadcrumb-wrapper col-xs-12">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a style="color:rgb(49, 51, 158)" (click)="gotoHome()">Acceuil</a>
+					</li>
+					<li class="breadcrumb-item"><a style="color:rgb(49, 51, 158)" class="themeSujet" (click)="gotoHome()"></a>
+					</li>
+					<li class="breadcrumb-item"></li>
+				</ol>
+			</div>
+			<div class="content-header-left col-md-9 col-xs-12">
+				<h3 class="sujet_name content-header-title mb-0"></h3>
+				<br>
+			</div>
+			<div class="resoudre content-header-left col-md-3 col-xs-12">
+				<button class="btn btn-success" (click)="clearModal.open()">Fermer ce sujet</button>
+			</div>
+		</div>
+		<br>
+		<div class="col-xs-12">
+			<div class="card">
+				<div class="card-body">
+					<div class="empty card-block" style="text-align:center">
+						Soyez le premier à commenter
+					</div>
+					<div class="card-block" *ngFor="let comment of comments" [attr.id]="comment.id">
+						<div class="inline-block imgSujet" style="width:20%;text-align: center">
+							<img class="sujetImg rounded-circle" style="width: 75px;height: 75px;" alt="User Image" src="http://localhost:8000/public/uploads/{{comment.image}}">
+							<br>
+							<span>{{comment.username}}</span>
+						</div>
+						<div class="inline-block" style="width:60%">
+							<div class="message" >{{comment.message}}
+							</div>
+							<p style="font-size: 10px">Envoyé le {{ comment.date | date:'short' }} {{comment.id}}</p>
+						</div>
+						<div class="inline-block" style="width:20%;text-align: center;">
+							<span *ngIf="comment.sender_id == loggedUser || _authService.getUserType == '1'" (click)="openDelModal(comment.id)" style="font-size:20px;color:red; margin-right: 5px"><i class="icon-trash-o"></i></span>
+							<span *ngIf="comment.sender_id == loggedUser" (click)="openPutModal(comment.id,comment.message)" style="font-size:20px;color:rgb(32, 62, 192); margin-left: 5px"><i class="icon-edit2"></i></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 offset-md-3 col-xs-12 pb-2">
+			<textarea #newComment style="height:150px; resize:none" (keyup.enter)="addComment(newComment.value); newComment.value=''" type="text" class="form-control round"
+			placeholder="Votre commentaire" aria-describedby="button-addon2"></textarea>
+		</div>
+		<div class="col-md-3 col-xs-12">
+			<button class="btn btn-success" type="button" id="button-addon2" (click)="addComment(newComment.value); newComment.value=''">Ajouter</button>
+		</div>
+	</div>
 </div>
 
 <ngx-smart-modal customClass="nsm-centered" [closable]="false" #delModal identifier="delModal">
-  <h4>Voulez-vous vraiment supprimer ce commentaire ?</h4>
-  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="delModal.close()">Annuler</button>
-  <button class="btn btn-danger" (click)="delComment(delModal.getData())">Supprimer</button>
+	<h4>Voulez-vous vraiment supprimer ce commentaire ?</h4>
+	<button style="margin:10px 10px;" class="btn btn-secondary" (click)="delModal.close()">Annuler</button>
+	<button class="btn btn-danger" (click)="delComment(delModal.getData())">Supprimer</button>
 </ngx-smart-modal>
 
-<ngx-smart-modal customClass="nsm-centered" [closable]="false" #putModal identifier="putModal" >
-  <h4  *ngIf="putModal.hasData()">Modifier ce commentaire</h4>
-  <input #input *ngIf="putModal.hasData()" (keyup)="putModal.getData().message=input.value" type="text" class="form-control" value="{{putModal.getData().message}}">
-  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="putModal.close()">Annuler</button>
-  <button class="btn btn-primary" (click)="putComment(putModal.getData().id,putModal.getData().message);putModal.getData().message=''">Modifier</button>
+<ngx-smart-modal customClass="nsm-centered" [closable]="false" #putModal identifier="putModal">
+	<h4 *ngIf="putModal.hasData()">Modifier ce commentaire</h4>
+	<textarea style="height:100px; resize:none" #input *ngIf="putModal.hasData()" (keyup)="putModal.getData().message=input.value" type="text" class="form-control"
+	 value="{{putModal.getData().message}}"></textarea>
+	<button style="margin:10px 10px;" class="btn btn-secondary" (click)="putModal.close()">Annuler</button>
+	<button class="btn btn-primary" (click)="putComment(putModal.getData().id,putModal.getData().message);putModal.getData().message=''">Modifier</button>
 </ngx-smart-modal>
 
-<ngx-smart-modal customClass="nsm-centered" [closable]="false" #clearModal identifier="clearModal" >
-  <h4>Voulez-vous vraiment fermer ce sujet ?</h4>
-  <button style="margin:10px 10px;" class="btn btn-secondary" (click)="clearModal.close()">Annuler</button>
-  <button class="btn btn-success" (click)="clearSujet()">Valider</button>
+<ngx-smart-modal customClass="nsm-centered" [closable]="false" #clearModal identifier="clearModal">
+	<h4>Voulez-vous vraiment fermer ce sujet ?</h4>
+	<p style="color:red">Vous ne pourrez plus le rouvrir une fois fermé</p>
+	<div style="text-align:center">
+		<button style="margin:10px 10px;" class="btn btn-secondary" (click)="clearModal.close()">Annuler</button>
+		<button class="btn btn-success" (click)="clearSujet()">Valider</button>
+	</div>
 </ngx-smart-modal>
-
-<div *ngIf=" sujet.length>0 ">
-<div *ngIf="_authService.loggedIn == true && sujet[0].resolu == 0 " class="input-group">
-  <input  #newComment
-          (keyup.enter)="addComment(newComment.value); newComment.value=''"
-          type="text" class="form-control" 
-          placeholder="Your comment" 
-          aria-describedby="button-addon2">
-  <div class="input-group-append">
-    <button class="btn btn-success" type="button" id="button-addon2" (click)="addComment(newComment.value); newComment.value=''">Ajouter</button>
-  </div>
-</div>
-<br>
-<button class="btn btn-success" *ngIf="sujet[0].resolu == 0 && sujet[0].creator == userID" (click)="clearModal.open()">Fermer ce sujet</button>
-</div>

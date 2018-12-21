@@ -1,0 +1,17 @@
+.list-group-item:hover{
+    color: #009688;
+    box-shadow: inset 0 0 0 5px #009688;
+    transition: 0.4s;
+}
+.list-group-item{
+    transition: 0.25s;
+}
+
+.card-block:hover{
+    color: #009688;
+    box-shadow: inset 0 0 0 5px #009688;
+    transition: 0.4s;
+}
+.card-block{
+    transition: 0.25s;
+}

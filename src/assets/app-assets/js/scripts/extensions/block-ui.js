@@ -423,7 +423,7 @@ $(document).ready(function(){
             centerY: false,
             css: {
                 width: '250px',
-                top: '20px',
+                top: '70px',
                 left: '',
                 right: '20px',
                 border: 'none',
@@ -442,12 +442,12 @@ $(document).ready(function(){
             message: $('.growl-notification-add'),
             fadeIn: 700,
             fadeOut: 700,
-            timeout: 3000,
+            timeout: 5000,
             showOverlay: false,
             centerY: false,
             css: {
                 width: '250px',
-                top: '20px',
+                top: '70px',
                 left: '',
                 right: '20px',
                 border: 'none',

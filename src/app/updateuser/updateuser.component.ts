@@ -30,27 +30,35 @@ export class UpdateuserComponent implements OnInit {
   }
 
   openDelModal(id,username) {
-    let obj: Object = {
-      'user_id': id,
-      'username':username
+    if (id == this.loggedUser) {
+      return false
+    }else{
+      let obj: Object = {
+        'user_id': id,
+        'username':username
+      }
+      this.modal.resetModalData('delModal')
+      console.log(id)
+      this.modal.setModalData(obj, 'delModal');
+      this.modal.getModal('delModal').open();
     }
-    this.modal.resetModalData('delModal')
-    console.log(id)
-    this.modal.setModalData(obj, 'delModal');
-    this.modal.getModal('delModal').open();
   }
 
   openPutModal(id, username, isAdmin) {
-    this.modal.resetModalData('putModal')
-    let obj: Object = {
-      'user_id': id,
-      'username': username,
-      'isAdmin':isAdmin,
-      'myCheck':isAdmin==1
+    if (id == this.loggedUser) {
+      return false
+    }else{
+      this.modal.resetModalData('putModal')
+      let obj: Object = {
+        'user_id': id,
+        'username': username,
+        'isAdmin':isAdmin,
+        'myCheck':isAdmin==1
+      }
+      
+      this.modal.setModalData(obj, 'putModal');
+      this.modal.getModal('putModal').open();
     }
-    
-    this.modal.setModalData(obj, 'putModal');
-    this.modal.getModal('putModal').open();
   }
 
   delUser(id) {
@@ -102,7 +110,8 @@ export class UpdateuserComponent implements OnInit {
     if (this.isAdmin != '1') {
       this.router.navigate(['home'])
     }
-
+    $('body').css('background','none')
+    $('body').css('background-color','#F3F3F3')
     this._userService.getAllUsers().subscribe(data => this.users = data);
 
 

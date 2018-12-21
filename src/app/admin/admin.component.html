@@ -1,24 +1,39 @@
-<div>
-  <a [routerLink]="['putfaq']" href="#">Ajouter/Modifier/Supprimer une question FAQ</a>
-  <hr>
+<div class="container" style="padding-top:10vh">
+  <div class="row">
+    <div class="content-header">
+      <div class="breadcrumb-wrapper col-xs-12">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a style="color:rgb(49, 51, 158)" (click)="gotoHome()">Acceuil</a>
+          </li>
+          <li class="breadcrumb-item active">Admin
+          </li>
+        </ol>
+      </div>
+      <div class="content-header-left col-xs-12" style="margin-bottom:30px">
+        <h1 class="content-header-title mb-0">Page Administrateur</h1>
+      </div>
+    </div>
+    <div class="col-xs-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-block">
+            <ul class="list-group list">
+              <li class="list-group-item">
+                <a [routerLink]="['putfaq']" href="#"><h3>FAQ</h3></a>
+              </li>
+              <li class="list-group-item">
+                <h3><a [routerLink]="['putsujets']" href="#">Forums</a></h3>
+              </li>
+              <li class="list-group-item">
+                <h3><a [routerLink]="['putthemes']" href="#">Thèmes</a></h3>
+              </li>
+              <li class="list-group-item">
+                <h3><a [routerLink]="['updateuser']" href="#">Utilisateurs</a></h3>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div>
-  <a [routerLink]="['putsujets']" href="#">Ajouter/Modifier/Supprimer un sujet</a>
-  <hr>
-</div>
-<div>
-  <a [routerLink]="['putthemes']" href="#">Ajouter/Modifier/Supprimer un thème</a>
-  <hr>
-</div>
-<div>
-  <a [routerLink]="['updateuser']" href="#">Modifier/Supprimer un utilisateur</a>
-  <hr>
-</div>
-<button (click)="modal.getModal('myModal').open()">Open myModal</button>
-<ngx-smart-modal customClass="nsm-centered wide-modal" #myModal identifier="myModal">
-  <h1>Title</h1>
-  <p>Some stuff...</p>
-  <input type="text">
-
-  <button class="" (click)="myModal.close()">Close</button>
-</ngx-smart-modal>
