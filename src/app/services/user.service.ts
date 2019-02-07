@@ -12,6 +12,14 @@ export class UserService {
     return this.http.get<Updateuser[]>('http://localhost:8000/api/users');
   }
 
+  getUserByEmail(email:string): Observable<void[]> {
+    return this.http.get<void[]>('http://localhost:8000/api/getuserbyemail/'+email);
+  }
+
+  checkToken(token:string): Observable<void>{
+    return this.http.get<void>('http://localhost:8000/api/checktoken/'+token);
+  }
+
   updateUser(id: number,isAdmin: number) {
     return this.http.put('http://localhost:8000/api/users/'+id, {admin:isAdmin});
   }

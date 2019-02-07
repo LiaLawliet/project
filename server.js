@@ -3,10 +3,19 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 let crypto = require('crypto')
-var path = require('path');
+let path = require('path');
 const mime = require('mime');
+let nodemailer = require('nodemailer');
 
-var storage = multer.diskStorage({
+var transporter = nodemailer.createTransport({
+  service: process.env.MAILER_SERVICE_PROVIDER || 'Gmail',
+  auth: {
+         user: 'yacine.fethi41@gmail.com',
+         pass: 'Yapopaf41'
+  }
+});
+
+let storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'public/uploads/')
   },
@@ -32,14 +41,35 @@ var mysql = require('mysql');
 app.use(cors());
 app.use(bodyParser.json());
 
+app.route('/api/resetpasswordmail').post((req, res) => {
+
+  let token = jwt.sign({ userID: req.body.id }, 'todo-app-super-shared-secret', { expiresIn : 60*5 });
+  
+  let mailOptions = {
+    from: "yacine.fethi41@gmail.com", // sender address
+    to: req.body.email, // list of receivers
+    subject: "Mot de passe perdu", // Subject line
+    html: "<p>Apparement t'as perdu ton mot de passe clique sur ce <a href='http://localhost:4200/resetpassword/"+req.body.id+"/"+token+"'>lien</a></p>"// plain text body
+  };
+
+  transporter.sendMail(mailOptions, function (err, info) {
+    if(err)
+      console.log(err)
+    else
+      console.log(info);
+  });
+})
 
 app.use(
   expressJwt({ secret: 'todo-app-super-shared-secret' }).unless({
     path: [
       /^\/public\/.*/,
+      /^\/api\/password\/.*/,
+      /^\/api\/checktoken\/.*/,
       '/api/themes',
       '/api/nothiddenthemes',
       '/api/nothiddensujets',
+      '/api/check',
       '/api/auth',
       '/api/sujets',
       '/api/qrs',
@@ -48,6 +78,7 @@ app.use(
       '/api/forumNbCom',
       /^\/api\/sujets\/.*/,
       { url: /^\/api\/comments\/.*/, methods: ['GET'] },
+      { url: /^\/api\/getuserbyemail\/.*/, methods: ['GET'] },
       { url: /^\/api\/nothiddensujets\/.*/, methods: ['GET'] },
       { url: /^\/api\/qrs\/.*/, methods: ['GET'] },
       { url: '/api/comments', methods: ['GET'] }
@@ -301,6 +332,8 @@ app.route('/api/qrs/:id').put((req, res) => {
 //   });
 // });
 
+
+/****** AUTH *******/
 app.route('/api/auth').post((req, res) => {
   const body = req.body;
   const USERS = connection.query("SELECT * FROM users", function (err, result) {
@@ -309,10 +342,22 @@ app.route('/api/auth').post((req, res) => {
     if (body.password != user.password) return res.sendStatus(401);
 
     let token = jwt.sign({ userID: user.user_id }, 'todo-app-super-shared-secret', { expiresIn: '2h' });
+    console.log(jwt.decode(token).exp*1000)
     res.send({password:user.password, email: user.email, isAdmin: user.isAdmin ,username: user.username,user_id:user.user_id,image:user.image,token });
   });
 
 });
+
+app.route('/api/checktoken/:token').get((req, res) =>{
+  let token = jwt.decode(req.params.token).exp*1000;
+  console.log(jwt.decode(req.params.token).exp*1000)
+  console.log(Date.now())
+  if (token > Date.now()) {
+    res.send(false)
+  }else{
+    res.send(true)
+  }
+})
 
 /***** COMMENTS *******/
 
@@ -369,6 +414,14 @@ app.route('/api/users').get((req, res) => {
     res.send(result);
   });
 })
+
+app.route('/api/getuserbyemail/:email').get((req, res) => {
+  connection.query("SELECT * FROM users WHERE email = ?",[req.params.email], function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+})
+
 
 app.route('/api/users/:id').delete((req, res) => {
   connection.query("DELETE FROM users WHERE user_id = ?",[req.params.id], function (err, result) {

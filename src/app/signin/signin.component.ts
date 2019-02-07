@@ -23,14 +23,14 @@ export class SigninComponent implements OnInit {
   addUser(email: string, username: string, password: string, checkpassword: string){
     if (username != '' && password != '' && email != '' && password == checkpassword ) {
       this._userService.insertUser({email: email,password: password, username:username}).subscribe(data => {
-        console.log("POST Request is successful ", data);
+        console.log("POST Request is successful", data);
         this.router.navigate(['login']);
     },
     error => {
         console.log("Error", error);
     });
     }else{
-      this.error = 'Mots de passe identiques ou champs vides'
+      this.error = 'Mots de passe différents ou champs vides'
     }
   }
   login(){

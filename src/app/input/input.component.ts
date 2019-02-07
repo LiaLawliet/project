@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { CommentService } from '../services/comment.service'
 import { SujetService } from '../services/sujet.service'
+import { MailService } from '../services/mail.service'
 import { switchMap } from 'rxjs/operators';
 import { ThemeService } from '../services/theme.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
@@ -21,6 +22,7 @@ export class InputComponent implements OnInit {
 		private route: ActivatedRoute,
 		private _themeService: ThemeService,
 		private _commentService: CommentService,
+		private _mailService: MailService,
 		private _authService: AuthService,
 		private _sujetService: SujetService,
 		private router: Router,

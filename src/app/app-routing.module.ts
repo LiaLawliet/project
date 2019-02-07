@@ -4,6 +4,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { InputComponent } from './input/input.component';
 import { ForumComponent } from './forum/forum.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { LoginComponent } from './login/login.component';
 import { FaqComponent } from './faq/faq.component';
 import { PutfaqComponent } from './putfaq/putfaq.component';
@@ -17,6 +19,8 @@ import { UpdateuserComponent } from './updateuser/updateuser.component';
 import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [{path: 'home',component: HomeComponent},
+                        {path: 'forgotPassword', component: ForgotPasswordComponent},
+                        {path: 'resetpassword/:id/:token', component: ResetPasswordComponent},
                         {path: 'forum', component: ForumComponent},
                         {path: 'admin', component: AdminComponent},
                         {path: 'profile', component: ProfileComponent},
