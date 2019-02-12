@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { CommentService } from '../services/comment.service'
+import { CommentAdd } from '../services/commentadd'
 import { SujetService } from '../services/sujet.service'
+import { ChatService } from '../services/chat.service'
 import { MailService } from '../services/mail.service'
 import { switchMap } from 'rxjs/operators';
 import { ThemeService } from '../services/theme.service';
@@ -9,12 +11,13 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Sujet } from '../services/sujet';
 import * as $ from 'jquery';
+import * as io from 'socket.io-client';
 
 @Component({
 	selector: 'app-input',
 	templateUrl: './input.component.html',
 	styleUrls: ['./input.component.css'],
-	providers: [CommentService, SujetService]
+	providers: [CommentService, SujetService,ChatService]
 })
 export class InputComponent implements OnInit {
 
@@ -22,12 +25,33 @@ export class InputComponent implements OnInit {
 		private route: ActivatedRoute,
 		private _themeService: ThemeService,
 		private _commentService: CommentService,
+		private chatService: ChatService,
 		private _mailService: MailService,
 		private _authService: AuthService,
 		private _sujetService: SujetService,
 		private router: Router,
-		public modal: NgxSmartModalService) {
-	}
+		public modal: NgxSmartModalService) {			
+			//this.socket.on('chat',function(data){$('.card-body').append("<div class='card-block' id='"+data.id+"'><div class='inline-block imgSujet' style='width:20%;text-align: center'><img class='sujetImg rounded-circle' style='width: 75px;height: 75px;' alt='User Image' src='http://localhost:8000/public/uploads/"+data.image+"'><br><span>"+data.username+"</span></div><div class='inline-block' style='width:60%'><div class='message' >"+data.message+"</div><p style='font-size: 10px'>Envoyé le "+data.date+" "+data.id+"</p></div><div class='inline-block' style='width:20%;text-align: center;'><span *ngIf='comment.sender_id == loggedUser || _authService.getUserType == '1'' (click)='openDelModal(comment.id)' style='font-size:20px;color:red; margin-right: 5px'><i class='icon-trash-o'></i></span><span *ngIf='"+data.sender_id+" == loggedUser' (click)='openPutModal("+data.id+","+data.message+")' style='font-size:20px;color:rgb(32, 62, 192); margin-left: 5px'><i class='icon-edit2'></i></span></div></div>")})
+			
+			let comments;
+			this._commentService.getComments(parseInt(this.param)).subscribe(data => {
+				this.comments = data;
+				comments = this.comments;
+				if (comments.length != 0) {
+					$('.empty').hide()
+				}else{
+					$('.empty').show()
+				}
+				console.log(this.comments)
+				console.log(comments)
+				this.chatService.joinRoom({user:this._authService.getUser, room:parseInt(this.param)})
+			});
+			let socketevent = this.socketEvent
+			this.socket.on('chat',function(data){
+				socketevent(comments,data)
+			})
+			
+		}
 
 
 	//public pageID = parseInt(this.params.get('id'));
@@ -37,10 +61,11 @@ export class InputComponent implements OnInit {
 	public themeSujet;
 	private allSujets = [];
 	private allThemes = [];
-	public comments;
+	public comments:CommentAdd[] = [];
 	public sender = parseInt(this._authService.getUserID);
 	public isAdmin = this._authService.getUserType;
 	public loggedUser = parseInt(this._authService.getUserID);
+	private socket = io.connect('http://localhost:4000',parseInt(this.param));
 
 
 	addComment(newComment: string) {
@@ -56,16 +81,37 @@ export class InputComponent implements OnInit {
 				let allComments = this.allComments
 				let auth = this._authService
 				let senderid = this.sender
-				this._commentService.insertComment(this.sender, parseInt(this.param), newComment, new Date())
+				let date = new Date();
+				this._commentService.insertComment(this.sender, parseInt(this.param), newComment, date)
 				.subscribe(() => {
-						this._commentService.getComments(parseInt(this.param)).subscribe(data => { this.comments = data, console.log('Commentaires chargés') });
-						console.log('OKOKOKOKO');
+					this.socket.emit('chat', {
+						id: idPlus,
+						sender_id : senderid,
+						sujet_id: parseInt(this.param),
+						message: newComment,
+						date: date,
+						username: auth.getUser,
+						image: auth.getUserImage
+					})
 				});
 			}
 		}
 	}
+	socketEvent(comments,data){
+		comments.push({
+			id: data.id,
+			sender_id:data.sender_id,
+			sujet_id:data.sujet_id,
+			message:data.message,
+			date:data.date,
+			username:data.username,
+			image:data.image
+		})
+		console.log(comments)
+	}
 
 	getId() {
+		this._commentService.getAllComments().subscribe(data => this.allComments = data);
 		if (this.allComments.length != 0) {
 			return this.allComments.reduce((max, p) => p.id > max ? p.id : max, this.allComments[0].id) + 1;
 		} else {
@@ -139,16 +185,12 @@ export class InputComponent implements OnInit {
 		this._commentService.getComments(parseInt(this.param)).subscribe(data => {
 			this.comments = data;
 			let comments = this.comments;
-			console.log(data);
 			if (comments.length != 0) {
 				$('.empty').hide()
 			}else{
 				$('.empty').show()
 			}
 		});
-		setTimeout(() => {
-		  	this.onTimeOut();
-		}, 1000);
 	}
 
 	ngOnInit() {
@@ -183,8 +225,8 @@ export class InputComponent implements OnInit {
 			});
 		});
 
-		this.onTimeOut();
-
 		this._commentService.getAllComments().subscribe(data => this.allComments = data);
+
+		
 	}
 }

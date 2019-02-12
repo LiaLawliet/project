@@ -6,12 +6,14 @@ let crypto = require('crypto')
 let path = require('path');
 const mime = require('mime');
 let nodemailer = require('nodemailer');
+let socket = require('socket.io');
+
 
 var transporter = nodemailer.createTransport({
   service: process.env.MAILER_SERVICE_PROVIDER || 'Gmail',
   auth: {
-         user: 'yacine.fethi41@gmail.com',
-         pass: 'Yapopaf41'
+    user: 'yacine.fethi41@gmail.com',
+    pass: 'Yapopaf41'
   }
 });
 
@@ -22,7 +24,7 @@ let storage = multer.diskStorage({
   filename: function (req, file, cb) {
     crypto.pseudoRandomBytes(16, function (err, raw) {
       if (err) return cb(err)
-
+      
       cb(null, raw.toString('hex') + Date.now() + '.' + mime.extension(file.mimetype))
     })
   }
@@ -35,8 +37,27 @@ const jwt = require('jsonwebtoken');
 const expressJwt = require('express-jwt');
 const app = express();
 
+
 const cors = require('cors');
 var mysql = require('mysql');
+
+let server = app.listen(4000,function(){
+  console.log('listening to port 4000');
+})
+
+let io = socket(server);
+
+io.on('connection',function(socket){
+  console.log('Socket connected ', socket.id);
+  socket.on('join',function(data){
+    socket.join(data.room);
+    console.log(data.user + 'joined the room : ' + data.room);
+  })
+  socket.on('chat', function(room,data){
+    console.log(room)
+    io.sockets.emit('chat',data);
+  })
+})
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -97,12 +118,13 @@ var connection = mysql.createConnection({
 
 connection.connect((err) => {
   if (err) throw err;
-  console.log('Connected!');
+  console.log('DB connected!');
 });
 
 app.listen(8000, () => {
   console.log('Server OK!');
 });
+
 
 /***** UPLOAD ******/
 

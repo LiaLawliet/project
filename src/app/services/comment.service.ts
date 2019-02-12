@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Comment } from './comment';
+import { CommentAdd } from './commentadd';
 
 @Injectable()
 export class CommentService {
@@ -11,8 +12,8 @@ export class CommentService {
     return this.http.get<Comment[]>('http://localhost:8000/api/comments');
   }
 
-  getComments(id:number): Observable<void> {
-    return this.http.get<void>('http://localhost:8000/api/comments/'+id);
+  getComments(id:number): Observable<CommentAdd[]> {
+    return this.http.get<CommentAdd[]>('http://localhost:8000/api/comments/'+id);
   }
 
   insertComment(sender_id:number,sujet_id: number,message: string, date: Date): Observable<void> {
