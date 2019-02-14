@@ -54,7 +54,7 @@ io.on('connection',function(socket){
     console.log(data.user + ' joined the room : ' + data.room);
   })
   socket.on('chat', function(room,data){
-    console.log(room)
+    console.log(data.username+' a envoyé un message dans la room '+room)
     io.sockets.in(room).emit('new message',data);
   })
 })
