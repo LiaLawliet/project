@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { CommentService } from '../services/comment.service'
-import { CommentAdd } from '../services/commentadd'
 import { SujetService } from '../services/sujet.service'
 import { ChatService } from '../services/chat.service'
 import { MailService } from '../services/mail.service'
@@ -46,10 +45,8 @@ export class InputComponent implements OnInit {
 				console.log(comments)
 				this.chatService.joinRoom({user:this._authService.getUser, room:parseInt(this.param)})
 			});
-			let socketevent = this.socketEvent
-			this.socket.on('chat',function(data){
-				socketevent(comments,data)
-			})
+			this.chatService.newMessageReceived()
+        	.subscribe(data=>this.comments.push(data));
 			
 		}
 
@@ -61,11 +58,10 @@ export class InputComponent implements OnInit {
 	public themeSujet;
 	private allSujets = [];
 	private allThemes = [];
-	public comments:CommentAdd[] = [];
+	public comments = [];
 	public sender = parseInt(this._authService.getUserID);
 	public isAdmin = this._authService.getUserType;
 	public loggedUser = parseInt(this._authService.getUserID);
-	private socket = io.connect('http://localhost:4000',parseInt(this.param));
 
 
 	addComment(newComment: string) {
@@ -84,7 +80,7 @@ export class InputComponent implements OnInit {
 				let date = new Date();
 				this._commentService.insertComment(this.sender, parseInt(this.param), newComment, date)
 				.subscribe(() => {
-					this.socket.emit('chat', {
+					this.chatService.sendMessage(parseInt(this.param),{
 						id: idPlus,
 						sender_id : senderid,
 						sujet_id: parseInt(this.param),
@@ -96,18 +92,6 @@ export class InputComponent implements OnInit {
 				});
 			}
 		}
-	}
-	socketEvent(comments,data){
-		comments.push({
-			id: data.id,
-			sender_id:data.sender_id,
-			sujet_id:data.sujet_id,
-			message:data.message,
-			date:data.date,
-			username:data.username,
-			image:data.image
-		})
-		console.log(comments)
 	}
 
 	getId() {

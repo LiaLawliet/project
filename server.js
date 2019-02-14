@@ -51,11 +51,11 @@ io.on('connection',function(socket){
   console.log('Socket connected ', socket.id);
   socket.on('join',function(data){
     socket.join(data.room);
-    console.log(data.user + 'joined the room : ' + data.room);
+    console.log(data.user + ' joined the room : ' + data.room);
   })
   socket.on('chat', function(room,data){
     console.log(room)
-    io.sockets.emit('chat',data);
+    io.sockets.in(room).emit('new message',data);
   })
 })
 
