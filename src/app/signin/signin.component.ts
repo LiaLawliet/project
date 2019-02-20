@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
+import { MailService } from '../services/mail.service'
 import * as $ from 'jquery';
 
 @Component({
@@ -13,7 +14,7 @@ export class SigninComponent implements OnInit {
 
   public error: string;
   
-  constructor(private _userService: UserService,private router: Router) { }
+  constructor(private _userService: UserService,private router: Router,private _mailService: MailService) { }
 
   ngOnInit() {
     $('body').css('background','url(http://localhost:8000/public/uploads/bg-login.jpg) no-repeat center fixed');
@@ -21,17 +22,24 @@ export class SigninComponent implements OnInit {
   }
 
   addUser(email: string, username: string, password: string, checkpassword: string){
-    if (username != '' && password != '' && email != '' && password == checkpassword ) {
-      this._userService.insertUser({email: email,password: password, username:username}).subscribe(data => {
-        console.log("POST Request is successful", data);
-        this.router.navigate(['login']);
-    },
-    error => {
-        console.log("Error", error);
+    this.error = "";
+    this._mailService.checkmail(email).subscribe(res => {
+      if (res['bool'] == true) {
+        if (username != '' && password != '' && email != '' && password == checkpassword ) {
+          this._userService.insertUser({email: email,password: password, username:username}).subscribe(data => {
+            console.log("POST Request is successful", data);
+            this.router.navigate(['login']);
+          },
+          error => {
+              console.log("Error", error);
+          });
+        }else{
+          this.error = 'Mots de passe différents ou champs vides'
+        }
+      } else {
+        this.error = "L'email indiqué est inexistant"
+      }
     });
-    }else{
-      this.error = 'Mots de passe différents ou champs vides'
-    }
   }
   login(){
     this.router.navigate(['login']);

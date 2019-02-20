@@ -20,7 +20,8 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   sendEmail(){
-    this._userService.getUserByEmail($('#email').val()).subscribe(data => {if (data.length == 0) {
+    this._userService.getUserByEmail($('#email').val()).subscribe(data => {
+      if (data.length == 0) {
       console.log('Aucun résultat')
     }else{
       console.log(data[0]);

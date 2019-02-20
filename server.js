@@ -7,6 +7,7 @@ let path = require('path');
 const mime = require('mime');
 let nodemailer = require('nodemailer');
 let socket = require('socket.io');
+let emailExistence = require('email-existence')
 
 
 var transporter = nodemailer.createTransport({
@@ -41,6 +42,8 @@ const app = express();
 const cors = require('cors');
 var mysql = require('mysql');
 
+// SOCKET.IO
+
 let server = app.listen(4000,function(){
   console.log('listening to port 4000');
 })
@@ -59,8 +62,12 @@ io.on('connection',function(socket){
   })
 })
 
+// FIN SOCKET.IO
+
 app.use(cors());
 app.use(bodyParser.json());
+
+// MAIL FORGOT PASSWORD
 
 app.route('/api/resetpasswordmail').post((req, res) => {
 
@@ -90,7 +97,7 @@ app.use(
       '/api/themes',
       '/api/nothiddenthemes',
       '/api/nothiddensujets',
-      '/api/check',
+      '/api/checkmail',
       '/api/auth',
       '/api/sujets',
       '/api/qrs',
@@ -106,6 +113,14 @@ app.use(
     ],
   })
 );
+
+// MAIL CHECK EXISTENCE
+app.route('/api/checkmail').post((req, res) => {
+  emailExistence.check(req.body.email, function(err,response){
+    console.log('res: '+response);
+    res.send({bool:response});
+  });
+})
 
 app.use('/public',express.static(path.join(__dirname,'./public')))
 

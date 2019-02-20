@@ -31,7 +31,6 @@ export class InputComponent implements OnInit {
 		private router: Router,
 		public modal: NgxSmartModalService) {			
 			//this.socket.on('chat',function(data){$('.card-body').append("<div class='card-block' id='"+data.id+"'><div class='inline-block imgSujet' style='width:20%;text-align: center'><img class='sujetImg rounded-circle' style='width: 75px;height: 75px;' alt='User Image' src='http://localhost:8000/public/uploads/"+data.image+"'><br><span>"+data.username+"</span></div><div class='inline-block' style='width:60%'><div class='message' >"+data.message+"</div><p style='font-size: 10px'>Envoyé le "+data.date+" "+data.id+"</p></div><div class='inline-block' style='width:20%;text-align: center;'><span *ngIf='comment.sender_id == loggedUser || _authService.getUserType == '1'' (click)='openDelModal(comment.id)' style='font-size:20px;color:red; margin-right: 5px'><i class='icon-trash-o'></i></span><span *ngIf='"+data.sender_id+" == loggedUser' (click)='openPutModal("+data.id+","+data.message+")' style='font-size:20px;color:rgb(32, 62, 192); margin-left: 5px'><i class='icon-edit2'></i></span></div></div>")})
-			
 			let comments;
 			this._commentService.getComments(parseInt(this.param)).subscribe(data => {
 				this.comments = data;
@@ -46,8 +45,10 @@ export class InputComponent implements OnInit {
 				this.chatService.joinRoom({user:this._authService.getUser, room:parseInt(this.param)})
 			});
 			this.chatService.newMessageReceived()
-        	.subscribe(data=>this.comments.push(data));
-			
+        	.subscribe(data=>{
+				this.comments.push(data);
+				$('.empty').hide()
+			});
 		}
 
 
