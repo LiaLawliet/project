@@ -9,8 +9,7 @@ import * as $ from 'jquery';
 @Component({
 	selector: 'app-putsujets',
 	templateUrl: './putsujets.component.html',
-	styleUrls: ['./putsujets.component.css'],
-	providers: [SujetService, ThemeService]
+	styleUrls: ['./putsujets.component.css']
 })
 export class PutsujetsComponent implements OnInit {
 

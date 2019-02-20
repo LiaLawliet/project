@@ -11,8 +11,7 @@ import * as $ from 'jquery';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css'],
-  providers:[SujetService,ProfileService]
+  styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
 

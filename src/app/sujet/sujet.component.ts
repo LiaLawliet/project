@@ -12,8 +12,7 @@ import * as $ from 'jquery';
 @Component({
 	selector: 'app-sujet',
 	templateUrl: './sujet.component.html',
-	styleUrls: ['./sujet.component.css'],
-	providers: [SujetService, QrService, ThemeService]
+	styleUrls: ['./sujet.component.css']
 })
 
 export class SujetComponent implements OnInit {

@@ -9,8 +9,7 @@ import { AuthService } from '../auth.service';
 @Component({
 	selector: 'app-forum',
 	templateUrl: './forum.component.html',
-	styleUrls: ['./forum.component.css'],
-	providers: [SujetService, ThemeService]
+	styleUrls: ['./forum.component.css']
 })
 export class ForumComponent implements OnInit {
 

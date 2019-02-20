@@ -9,8 +9,7 @@ import * as $ from 'jquery';
 @Component({
 	selector: 'app-putfaq',
 	templateUrl: './putfaq.component.html',
-	styleUrls: ['./putfaq.component.css'],
-	providers: [ThemeService, QrService]
+	styleUrls: ['./putfaq.component.css']
 })
 export class PutfaqComponent implements OnInit {
 

@@ -10,8 +10,7 @@ import * as $ from 'jquery';
 @Component({
   selector: 'app-putthemes',
   templateUrl: './putthemes.component.html',
-  styleUrls: ['./putthemes.component.css'],
-  providers:[ThemeService,SujetService]
+  styleUrls: ['./putthemes.component.css']
 })
 export class PutthemesComponent implements OnInit {
   private hover = false;

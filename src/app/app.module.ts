@@ -32,10 +32,11 @@ import { AuthService } from './auth.service';
 import { UserService } from './services/user.service';
 import { ProfileService } from './services/profile.service';
 import { MailService } from './services/mail.service';
+import { ThemeService } from './services/theme.service';
+import { ChatService } from './services/chat.service';
 
 import { AuthGuard } from './auth.guard';
 import { AppRoutingModule } from './app-routing.module';
-import { ThemeService } from './services/theme.service';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -59,8 +60,7 @@ export function tokenGetter() {
     ProfileComponent,
     PutsujetsComponent,
     ForgotPasswordComponent,
-    ResetPasswordComponent,
-    
+    ResetPasswordComponent    
   ],
   imports: [
     BrowserModule,
@@ -80,7 +80,17 @@ export function tokenGetter() {
     NgbModule.forRoot(),
     NgxSmartModalModule.forRoot()
   ],
-  providers: [InputComponent, CommentService, QrService,ThemeService, AuthService,UserService, AuthGuard, ProfileService, MailService],
+  providers: [
+    QrService,
+    CommentService,
+    AuthService,
+    UserService,
+    ProfileService,
+    MailService,
+    AuthGuard,
+    ThemeService,
+    ChatService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

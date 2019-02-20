@@ -7,8 +7,7 @@ import * as $ from 'jquery';
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
-  styleUrls: ['./signin.component.css'],
-  providers: [UserService]
+  styleUrls: ['./signin.component.css']
 })
 export class SigninComponent implements OnInit {
 
